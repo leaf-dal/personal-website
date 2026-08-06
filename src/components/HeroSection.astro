@@ -1,0 +1,65 @@
+---
+/**
+ * 首页首屏组件
+ * 展示个人名称、拼音、一句话简介、详细描述以及两个主要行动按钮。
+ */
+import {
+  HERO_TITLE,
+  HERO_SUBTITLE,
+  HERO_DESCRIPTION,
+  SITE_AUTHOR_PINYIN
+} from '../constants/site';
+import GhostElement from './GhostElement.astro';
+---
+
+<!--
+  min-h-[calc(100vh-4rem)]: 首屏高度 = 视口高度减去固定导航栏高度（4rem = h-16）
+  flex items-center: 内容垂直居中
+  text-center: 文字水平居中
+  relative: 为 Ghost 装饰元素提供定位上下文
+-->
+<section class="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 sm:px-6 lg:px-8">
+  <!-- 右上角幽灵装饰，为黑白页面增加趣味 -->
+  <GhostElement opacity={0.15} positionClass="top-20 right-6 sm:top-16 sm:right-12" />
+
+  <div class="relative z-10 mx-auto max-w-3xl text-center">
+    <!-- 小标题/标签：身份定位 -->
+    <p class="mb-4 text-sm font-medium uppercase tracking-widest text-accent sm:text-base">
+      {HERO_SUBTITLE}
+    </p>
+
+    <!-- 主标题 -->
+    <h1 class="text-4xl font-extrabold tracking-tight text-text-primary sm:text-5xl md:text-6xl">
+      {HERO_TITLE}
+    </h1>
+
+    <!-- 拼音标注：使用等宽字体，置于姓名下方 -->
+    <p class="mt-3 text-sm font-medium tracking-[0.3em] text-text-muted sm:text-base font-mono">
+      {SITE_AUTHOR_PINYIN}
+    </p>
+
+    <!-- 描述文字 -->
+    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-text-secondary sm:text-xl">
+      {HERO_DESCRIPTION}
+    </p>
+
+    <!-- 行动按钮组 -->
+    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <!-- 主按钮：查看项目 -->
+      <a
+        href="/projects"
+        class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
+      >
+        查看项目
+      </a>
+
+      <!-- 次按钮：了解更多 -->
+      <a
+        href="/about"
+        class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all hover:border-accent hover:text-accent"
+      >
+        了解更多
+      </a>
+    </div>
+  </div>
+</section>

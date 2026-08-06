@@ -1,0 +1,84 @@
+---
+/**
+ * 项目展示页面
+ * 以网格卡片形式展示多个项目，包含标题、简介、技术标签和外部链接。
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE_AUTHOR } from '../constants/site';
+
+// 项目列表数据：后续可迁移至独立数据文件或内容集合
+const projectList = [
+  {
+    title: '个人博客系统',
+    description:
+      '一款基于 Astro 构建的静态博客，支持 Markdown 写作、标签分类、暗色模式与响应式布局。通过这个项目，我完整体验了从页面设计、组件拆分到构建部署的现代前端开发流程，兼顾了加载速度与 SEO 表现。',
+    tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
+    link: 'https://github.com/yourname/blog'
+  },
+  {
+    title: '任务管理面板',
+    description:
+      '一个轻量级的任务管理工具，支持拖拽排序、标签筛选与本地数据持久化。在开发过程中，我深入理解了状态管理、用户交互反馈以及数据存储之间的协作方式，也锻炼了组件化思维能力。',
+    tags: ['React', 'TypeScript', 'LocalStorage'],
+    link: 'https://github.com/yourname/todo-board'
+  },
+  {
+    title: '天气预报小程序',
+    description:
+      '调用公开天气 API 实现的城市天气查询应用，支持城市搜索、未来七天 forecast 与温度趋势图展示。这个项目帮助我熟悉了异步数据请求、错误处理以及数据可视化的基本表达方式。',
+    tags: ['Vue', 'REST API', 'ECharts'],
+    link: 'https://github.com/yourname/weather-app'
+  },
+  {
+    title: '在线 Markdown 编辑器',
+    description:
+      '一个支持实时预览、本地自动保存与 HTML 导出的轻量级 Markdown 编辑器。在实现过程中，我学习了文本解析、编辑器状态同步以及用户体验细节打磨的重要性。',
+    tags: ['React', 'Marked', 'Tailwind CSS'],
+    link: 'https://github.com/yourname/markdown-editor'
+  },
+  {
+    title: '个人作品集网站',
+    description:
+      '也就是你现在看到的这个网站。它采用 Astro + Tailwind CSS 构建，追求极简的深色风格、清晰的模块化结构以及流畅的响应式体验，是我学习前端以来最完整的一次实践。',
+    tags: ['Astro', 'Tailwind CSS', 'Responsive'],
+    link: '/'
+  },
+  {
+    title: '数据可视化仪表盘',
+    description:
+      '一个用于展示业务关键指标的仪表盘原型，支持多维度筛选与图表联动。通过这个项目，我初步接触了数据驱动的前端设计思路，也体会到清晰的数据表达对于决策支持的价值。',
+    tags: ['Vue', 'ECharts', 'REST API'],
+    link: 'https://github.com/yourname/dashboard'
+  }
+];
+---
+
+<BaseLayout
+  title="项目展示"
+  description={`${SITE_AUTHOR} 的项目作品集，涵盖前端应用、工具开发与响应式网站。`}
+>
+  <section class="py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <SectionTitle
+        title="Projects"
+        subtitle="从灵感到实现，用代码搭建可见的成长轨迹"
+      />
+
+      <!-- 项目卡片网格：移动端单列，md 双列，lg 三列 -->
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          projectList.map((project) => (
+            <ProjectCard
+              title={project.title}
+              description={project.description}
+              tags={project.tags}
+              link={project.link}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

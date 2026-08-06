@@ -1,0 +1,191 @@
+---
+/**
+ * 首页
+ * 这是网站的入口页面，包含首屏、我的技能、我的资源、精选项目和底部行动召唤。
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+import ButterflyElement from '../components/ButterflyElement.astro';
+import { SITE_DESCRIPTION } from '../constants/site';
+
+// 我的技能数据：成熟简练的表达，突出可提供的实际帮助
+const skillItems = [
+  {
+    title: 'PPT 视觉设计',
+    description:
+      '将复杂信息转化为清晰的视觉叙事，能够独立完成课堂汇报、竞赛答辩与活动宣讲所需的演示文稿设计。'
+  },
+  {
+    title: 'Python 开发',
+    description:
+      '具备 Python 基础开发能力，可编写实用脚本与小工具，也能尝试制作简单的创意游戏，提升学习与工作效率。'
+  },
+  {
+    title: 'AI 辅助创作',
+    description:
+      '系统学习并考取多个 AI 相关证书，能够运用 AI 工具完成漫剧、音乐、网站等内容的创作，持续拓展创作边界。'
+  },
+  {
+    title: '视频剪辑',
+    description:
+      '掌握完整的剪辑流程，包括素材整理、节奏把控、字幕包装与配乐调色，可为班级或社团活动提供视频制作支持。'
+  }
+];
+
+// 我的资源数据：服务同学的学习资料整理
+const resourceItems = [
+  {
+    title: '语言考试',
+    items: ['大学英语四级资料', '大学英语六级资料', '雅思备考资料']
+  },
+  {
+    title: '升学与就业',
+    items: ['公务员考试资料', '考研复习资料', '本专业大学专业规划']
+  },
+  {
+    title: '计算机与实用技能',
+    items: ['计算机二级考试资料', '电脑常见问题解决策略']
+  }
+];
+
+// 精选项目数据
+const featuredProjects = [
+  {
+    title: '个人博客系统',
+    description:
+      '基于 Astro 构建的静态博客，支持 Markdown 写作、标签分类、暗色模式与响应式布局，完整实践了现代前端开发流程。',
+    tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
+    link: '/projects'
+  },
+  {
+    title: '任务管理面板',
+    description:
+      '轻量级任务管理工具，支持拖拽排序、标签筛选与本地数据持久化，在项目中深入理解了状态管理与用户交互设计。',
+    tags: ['React', 'TypeScript', 'LocalStorage'],
+    link: '/projects'
+  },
+  {
+    title: '天气预报小程序',
+    description:
+      '调用公开天气 API 实现的查询应用，支持城市搜索、未来七天 forecast 与温度趋势图，熟悉了异步请求与数据可视化。',
+    tags: ['Vue', 'REST API', 'ECharts'],
+    link: '/projects'
+  }
+];
+---
+
+<BaseLayout title="首页" description={SITE_DESCRIPTION}>
+  <!-- 全局蝴蝶装饰：四只带星星轨迹的蝴蝶 -->
+  <ButterflyElement />
+
+  <!-- 首屏 -->
+  <HeroSection />
+
+  <!-- 我的技能区 -->
+  <section class="relative z-10 py-20 sm:py-28" aria-labelledby="skills-heading">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <SectionTitle
+        title="My Skills"
+        subtitle="PPT · Python · AI 创作 · 视频剪辑"
+      />
+
+      <!--
+        grid: 移动端单列，md 双列，lg 三列
+        gap-8: 卡片间距
+      -->
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          skillItems.map((skill) => (
+            <div class="rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:border-accent/50">
+              <h3 id="skills-heading" class="text-lg font-bold text-text-primary">
+                {skill.title}
+              </h3>
+              <p class="mt-3 text-base leading-relaxed text-text-secondary">
+                {skill.description}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的资源区 -->
+  <section class="relative z-10 py-20 sm:py-28 bg-bg-secondary/50" aria-labelledby="resources-heading">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <SectionTitle
+        title="My Resources"
+        subtitle="整理的学习资料，希望能为同学们的备考与成长提供一些帮助"
+      />
+
+      <!-- 资源卡片网格：移动端单列，md 双列，lg 三列 -->
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          resourceItems.map((resource) => (
+            <ResourceCard
+              title={resource.title}
+              items={resource.items}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 精选项目区 -->
+  <section class="relative z-10 py-20 sm:py-28" aria-labelledby="projects-heading">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <SectionTitle
+        title="Featured Projects"
+        subtitle="在实践中学习，用作品记录成长"
+      />
+
+      <!-- 项目卡片网格 -->
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          featuredProjects.map((project) => (
+            <ProjectCard
+              title={project.title}
+              description={project.description}
+              tags={project.tags}
+              link={project.link}
+            />
+          ))
+        }
+      </div>
+
+      <!-- 查看更多项目按钮 -->
+      <div class="mt-12 text-center">
+        <a
+          href="/projects"
+          class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all hover:border-accent hover:text-accent"
+        >
+          查看全部项目
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部行动召唤区 -->
+  <section class="relative z-10 py-20 sm:py-28">
+    <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+        期待与你交流
+      </h2>
+      <p class="mt-4 text-lg text-text-secondary">
+        如果你在学习或项目中遇到问题，欢迎联系我。希望我的技能与资源能为身边的同学带来一些实际帮助。
+      </p>
+      <div class="mt-8">
+        <a
+          href="/about"
+          class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
+        >
+          联系我
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

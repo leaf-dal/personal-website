@@ -1,0 +1,38 @@
+---
+/**
+ * 统一区块标题组件
+ * 用于首页各个内容区块（技能、资源、项目等）的标题与副标题展示。
+ * 主标题使用英文花体（Dancing Script），营造优雅成熟的视觉风格。
+ */
+
+// 组件 Props 类型定义
+interface SectionTitleProps {
+  /** 主标题文本（英文） */
+  title: string;
+  /** 副标题文本（可选，中文说明） */
+  subtitle?: string;
+  /** 是否对花体标题加粗，默认 false */
+  bold?: boolean;
+}
+
+const { title, subtitle, bold = false } = Astro.props as SectionTitleProps;
+---
+
+<!-- text-center: 标题居中 -->
+<div class="text-center mb-12">
+  <!--
+    font-script: 花体英文字体（Dancing Script）
+    text-4xl/5xl/6xl: 花体需要较大字号才能展现优美曲线
+    font-bold: 若传入 bold 则加粗，适合需要强调的标题
+  -->
+  <h2
+    class={`font-script text-4xl text-text-primary sm:text-5xl md:text-6xl ${bold ? 'font-bold' : 'font-normal'}`}
+  >
+    {title}
+  </h2>
+  {
+    subtitle && (
+      <p class="mt-4 text-base text-text-secondary sm:text-lg">{subtitle}</p>
+    )
+  }
+</div>

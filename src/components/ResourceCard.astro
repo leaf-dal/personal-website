@@ -1,0 +1,42 @@
+---
+/**
+ * 资源卡片组件
+ * 用于"我的资源"板块，展示学习资料类别与具体内容。
+ */
+
+// 资源卡片 Props 类型
+interface ResourceCardProps {
+  /** 资源类别标题 */
+  title: string;
+  /** 该类别下的具体资料列表 */
+  items: string[];
+}
+
+const { title, items } = Astro.props as ResourceCardProps;
+---
+
+<!--
+  group: 启用子元素联动样式
+  hover:border-accent/50: 悬停时边框变亮
+-->
+<article
+  class="group rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:border-accent/50"
+>
+  <!-- 卡片标题 -->
+  <h3 class="text-lg font-bold text-text-primary">
+    {title}
+  </h3>
+
+  <!-- 资源列表 -->
+  <ul class="mt-4 space-y-2">
+    {
+      items.map((item) => (
+        <li class="flex items-start gap-2 text-base text-text-secondary">
+          <!-- 列表前的小圆点标记 -->
+          <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
+          <span>{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+</article>

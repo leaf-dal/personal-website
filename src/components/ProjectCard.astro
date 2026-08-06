@@ -1,0 +1,63 @@
+---
+/**
+ * 项目卡片组件
+ * 用于首页精选项目区与项目展示页，支持标题、描述、技术标签和外链。
+ */
+
+// 项目卡片 Props 类型
+interface ProjectCardProps {
+  /** 项目名称 */
+  title: string;
+  /** 项目简介 */
+  description: string;
+  /** 技术标签数组 */
+  tags: string[];
+  /** 项目链接地址（可选） */
+  link?: string;
+}
+
+const { title, description, tags, link } = Astro.props as ProjectCardProps;
+---
+
+<!--
+  group: 启用子元素在父元素悬停时的联动样式
+  hover:-translate-y-1: 悬停时轻微上浮
+  hover:shadow-xl: 悬停时增强阴影
+-->
+<article
+  class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-secondary transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20"
+>
+  <div class="flex flex-1 flex-col p-6">
+    <!-- 项目标题 -->
+    <h3 class="text-xl font-bold text-text-primary">
+      {link ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="transition-colors hover:text-accent"
+        >
+          {title}
+        </a>
+      ) : (
+        title
+      )}
+    </h3>
+
+    <!-- 项目描述 -->
+    <p class="mt-3 flex-1 text-base leading-relaxed text-text-secondary">
+      {description}
+    </p>
+
+    <!-- 技术标签 -->
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {
+        tags.map((tag) => (
+          <li class="rounded-full bg-bg-primary px-3 py-1 text-xs font-medium text-accent">
+            {tag}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</article>

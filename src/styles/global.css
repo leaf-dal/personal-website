@@ -1,0 +1,432 @@
+/* ==========================================================================
+   全局样式文件
+   1. 引入 Tailwind CSS v4（通过 @import 方式）
+   2. 定义黑白极简主题 CSS 变量
+   3. 重置与增强基础元素样式
+   4. 自定义滚动条与选中文字颜色
+   5. Ghost 幽灵浮动动画
+   ========================================================================== */
+
+/* 引入 Tailwind CSS，启用所有工具类 */
+@import "tailwindcss";
+
+/* --------------------------------------------------------------------------
+   主题层：使用 @theme 定义可在 Tailwind 工具类中使用的自定义颜色与字体
+   -------------------------------------------------------------------------- */
+@theme {
+  /* 主背景色：纯黑，打造极简深色基调 */
+  --color-bg-primary: #000000;
+
+  /* 次背景色：深灰，用于卡片、导航栏等层级区分 */
+  --color-bg-secondary: #0a0a0a;
+
+  /* 主文字色：纯白，确保在黑色背景上清晰可读 */
+  --color-text-primary: #ffffff;
+
+  /* 次文字色：浅灰，用于正文、描述等辅助信息 */
+  --color-text-secondary: #d4d4d4;
+
+  /* 弱化文字色：中灰，用于占位、时间、小标签 */
+  --color-text-muted: #737373;
+
+  /* 强调色：白色，与黑白主题统一，用于链接、按钮、高亮 */
+  --color-accent: #ffffff;
+
+  /* 强调色悬停态：柔和灰白 */
+  --color-accent-hover: #e5e5e5;
+
+  /* 边框色：深灰，低调分隔 */
+  --color-border: #262626;
+}
+
+/* --------------------------------------------------------------------------
+   基础层：设置 html、body 的全局字体、背景与文字颜色
+   -------------------------------------------------------------------------- */
+html {
+  /* 平滑滚动，提升页面内锚点跳转体验 */
+  scroll-behavior: smooth;
+}
+
+body {
+  /* 使用系统默认无衬线字体，优先保证中文显示效果 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+
+  /* 背景与文字颜色使用主题变量，方便后期统一调整 */
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+
+  /* 防止水平滚动条出现 */
+  overflow-x: hidden;
+
+  /* 优化文字渲染 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   选中文字颜色：与黑白主题协调
+   -------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+/* --------------------------------------------------------------------------
+   自定义滚动条：仅在支持 WebKit 的浏览器生效（Chrome、Edge、Safari）
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Ghost 幽灵浮动动画
+   让幽灵装饰元素缓慢上下漂浮，增加页面灵动感
+   -------------------------------------------------------------------------- */
+@keyframes ghost-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+.animate-ghost-float {
+  animation: ghost-float 4s ease-in-out infinite;
+}
+
+/* --------------------------------------------------------------------------
+   花体英文字体类
+   用于各板块英文标题，营造优雅、成熟的视觉风格
+   -------------------------------------------------------------------------- */
+.font-script {
+  font-family: 'Dancing Script', 'Great Vibes', cursive;
+}
+
+/* --------------------------------------------------------------------------
+   蝴蝶飞舞与星星轨迹动画
+   四只蝴蝶沿不同路径循环飞行，身后的小星星依次延迟出现，形成拖尾。
+   -------------------------------------------------------------------------- */
+
+/* 蝴蝶容器：通过 offset 定位在视口内的起始位置 */
+.butterfly-wrapper {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+}
+
+/* 第一只蝴蝶：从左下方出发，向右上盘旋 */
+.butterfly-1 {
+  left: 5%;
+  bottom: 15%;
+  animation: butterfly-path-1 18s linear infinite;
+}
+
+/* 第二只蝴蝶：从右上方出发，向左下盘旋 */
+.butterfly-2 {
+  right: 10%;
+  top: 20%;
+  animation: butterfly-path-2 22s linear infinite;
+}
+
+/* 第三只蝴蝶：从右上方向左侧中部飞舞 */
+.butterfly-3 {
+  right: 5%;
+  top: 45%;
+  animation: butterfly-path-3 20s linear infinite;
+}
+
+/* 第四只蝴蝶：从左侧中部向右下方飞舞 */
+.butterfly-4 {
+  left: 8%;
+  top: 60%;
+  animation: butterfly-path-4 24s linear infinite;
+}
+
+/* 蝴蝶 SVG：尺寸与颜色 */
+.butterfly-svg {
+  width: 100%;
+  height: 100%;
+  color: #e5e5e5;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+  animation: butterfly-flap 0.6s ease-in-out infinite alternate;
+}
+
+/* 蝴蝶翅膀扇动 */
+@keyframes butterfly-flap {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0.6);
+  }
+}
+
+/* 星星轨迹点：小白点，通过不同延迟跟随蝴蝶路径 */
+.star {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  animation: star-trail 18s linear infinite;
+}
+
+/* 第二只蝴蝶的星星轨迹使用更长周期 */
+.butterfly-2 .star {
+  animation-duration: 22s;
+}
+
+/* 为每个星星设置递增的延迟，形成拖尾效果 */
+.butterfly-wrapper .star:nth-child(2) { animation-delay: 0.2s; }
+.butterfly-wrapper .star:nth-child(3) { animation-delay: 0.4s; }
+.butterfly-wrapper .star:nth-child(4) { animation-delay: 0.6s; }
+.butterfly-wrapper .star:nth-child(5) { animation-delay: 0.8s; }
+.butterfly-wrapper .star:nth-child(6) { animation-delay: 1.0s; }
+.butterfly-wrapper .star:nth-child(7) { animation-delay: 1.2s; }
+.butterfly-wrapper .star:nth-child(8) { animation-delay: 1.4s; }
+.butterfly-wrapper .star:nth-child(9) { animation-delay: 1.6s; }
+
+/* 星星轨迹关键帧：与对应蝴蝶路径一致，但通过延迟落后 */
+.butterfly-1 .star {
+  animation-name: star-path-1;
+}
+
+.butterfly-2 .star {
+  animation-name: star-path-2;
+}
+
+.butterfly-3 .star {
+  animation-name: star-path-3;
+  animation-duration: 20s;
+}
+
+.butterfly-4 .star {
+  animation-name: star-path-4;
+  animation-duration: 24s;
+}
+
+/* 第一只蝴蝶的飞行路径 */
+@keyframes butterfly-path-1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(20vw, -25vh) rotate(15deg);
+  }
+  40% {
+    transform: translate(45vw, -10vh) rotate(-10deg);
+  }
+  60% {
+    transform: translate(30vw, -35vh) rotate(10deg);
+  }
+  80% {
+    transform: translate(10vw, -20vh) rotate(-5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 第一只蝴蝶星星的轨迹（与蝴蝶路径一致，但由 animation-delay 产生滞后） */
+@keyframes star-path-1 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  2% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    opacity: 0.8;
+    transform: translate(20vw, -25vh) scale(0.8);
+  }
+  40% {
+    opacity: 0.6;
+    transform: translate(45vw, -10vh) scale(0.6);
+  }
+  60% {
+    opacity: 0.4;
+    transform: translate(30vw, -35vh) scale(0.4);
+  }
+  80% {
+    opacity: 0.2;
+    transform: translate(10vw, -20vh) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+}
+
+/* 第二只蝴蝶的飞行路径 */
+@keyframes butterfly-path-2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-25vw, 20vh) rotate(-15deg);
+  }
+  50% {
+    transform: translate(-40vw, 40vh) rotate(5deg);
+  }
+  75% {
+    transform: translate(-15vw, 55vh) rotate(-10deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 第二只蝴蝶星星的轨迹 */
+@keyframes star-path-2 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  2% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translate(-25vw, 20vh) scale(0.8);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-40vw, 40vh) scale(0.4);
+  }
+  75% {
+    opacity: 0.2;
+    transform: translate(-15vw, 55vh) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+}
+
+/* 第三只蝴蝶的飞行路径 */
+@keyframes butterfly-path-3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-30vw, -15vh) rotate(10deg);
+  }
+  50% {
+    transform: translate(-20vw, -35vh) rotate(-5deg);
+  }
+  75% {
+    transform: translate(-45vw, -20vh) rotate(8deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 第三只蝴蝶星星的轨迹 */
+@keyframes star-path-3 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  2% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translate(-30vw, -15vh) scale(0.8);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-20vw, -35vh) scale(0.5);
+  }
+  75% {
+    opacity: 0.2;
+    transform: translate(-45vw, -20vh) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+}
+
+/* 第四只蝴蝶的飞行路径 */
+@keyframes butterfly-path-4 {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(25vw, 10vh) rotate(-12deg);
+  }
+  40% {
+    transform: translate(40vw, -10vh) rotate(8deg);
+  }
+  60% {
+    transform: translate(55vw, 15vh) rotate(-5deg);
+  }
+  80% {
+    transform: translate(30vw, 25vh) rotate(10deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* 第四只蝴蝶星星的轨迹 */
+@keyframes star-path-4 {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  2% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    opacity: 0.8;
+    transform: translate(25vw, 10vh) scale(0.8);
+  }
+  40% {
+    opacity: 0.6;
+    transform: translate(40vw, -10vh) scale(0.5);
+  }
+  60% {
+    opacity: 0.3;
+    transform: translate(55vw, 15vh) scale(0.3);
+  }
+  80% {
+    opacity: 0.1;
+    transform: translate(30vw, 25vh) scale(0.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+}

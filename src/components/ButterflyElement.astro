@@ -1,0 +1,130 @@
+---
+/**
+ * 蝴蝶装饰组件
+ * 四只沿不同路径飞舞的蝴蝶，身后带有星星点点的轨迹，
+ * 为页面增添灵动与梦幻感。
+ */
+---
+
+<!--
+  fixed inset-0: 覆盖整个视口
+  pointer-events-none: 不响应鼠标事件
+  z-0: 位于内容底层
+  overflow-hidden: 防止动画元素产生滚动条
+-->
+<div
+  class="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+  aria-hidden="true"
+>
+  <!-- 第一只蝴蝶：从左下向右上飞舞 -->
+  <div class="butterfly-wrapper butterfly-1">
+    <svg class="butterfly-svg" viewBox="0 0 60 60" fill="none">
+      <path
+        d="M30 30c-10 -15 -25 -15 -25 5c0 15 15 20 25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <path
+        d="M30 30c10 -15 25 -15 25 5c0 15 -15 20 -25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <ellipse cx="30" cy="32" rx="3" ry="12" fill="currentColor" />
+      <path d="M28 22c-4 -6 -8 -6 -10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      <path d="M32 22c4 -6 8 -6 10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    </svg>
+
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+  </div>
+
+  <!-- 第二只蝴蝶：从右上方盘旋到左侧 -->
+  <div class="butterfly-wrapper butterfly-2">
+    <svg class="butterfly-svg" viewBox="0 0 60 60" fill="none">
+      <path
+        d="M30 30c-10 -15 -25 -15 -25 5c0 15 15 20 25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <path
+        d="M30 30c10 -15 25 -15 25 5c0 15 -15 20 -25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <ellipse cx="30" cy="32" rx="3" ry="12" fill="currentColor" />
+      <path d="M28 22c-4 -6 -8 -6 -10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      <path d="M32 22c4 -6 8 -6 10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    </svg>
+
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+  </div>
+
+  <!-- 第三只蝴蝶：从右上向左侧中部飞舞 -->
+  <div class="butterfly-wrapper butterfly-3">
+    <svg class="butterfly-svg" viewBox="0 0 60 60" fill="none">
+      <path
+        d="M30 30c-10 -15 -25 -15 -25 5c0 15 15 20 25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <path
+        d="M30 30c10 -15 25 -15 25 5c0 15 -15 20 -25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <ellipse cx="30" cy="32" rx="3" ry="12" fill="currentColor" />
+      <path d="M28 22c-4 -6 -8 -6 -10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      <path d="M32 22c4 -6 8 -6 10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    </svg>
+
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+  </div>
+
+  <!-- 第四只蝴蝶：从左侧中部向右下飞舞 -->
+  <div class="butterfly-wrapper butterfly-4">
+    <svg class="butterfly-svg" viewBox="0 0 60 60" fill="none">
+      <path
+        d="M30 30c-10 -15 -25 -15 -25 5c0 15 15 20 25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <path
+        d="M30 30c10 -15 25 -15 25 5c0 15 -15 20 -25 10"
+        fill="currentColor"
+        opacity="0.9"
+      />
+      <ellipse cx="30" cy="32" rx="3" ry="12" fill="currentColor" />
+      <path d="M28 22c-4 -6 -8 -6 -10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      <path d="M32 22c4 -6 8 -6 10 -2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    </svg>
+
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+    <span class="star"></span>
+  </div>
+</div>

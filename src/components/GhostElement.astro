@@ -1,0 +1,72 @@
+---
+/**
+ * Ghost 幽灵装饰组件（万圣节版）
+ * 一个漂浮在页面角落的幽灵 SVG，白色高对比度设计，
+ * 带有柔和发光效果，头顶戴着小南瓜，营造万圣节氛围。
+ * 移动端宽度约 64px，桌面端约 144px，可通过 positionClass 调整位置。
+ */
+
+interface GhostElementProps {
+  /** 不透明度，默认 0.9，确保在黑色背景上清晰可见 */
+  opacity?: number;
+  /** CSS 定位类名，例如 "top-20 right-10" */
+  positionClass?: string;
+}
+
+const {
+  opacity = 0.9,
+  positionClass = 'top-24 right-8'
+} = Astro.props as GhostElementProps;
+---
+
+<!--
+  fixed: 固定定位，不随滚动移动
+  pointer-events-none: 不响应鼠标事件，避免遮挡内容点击
+  w-16 sm:w-36: 移动端 64px，桌面端 144px
+  animate-ghost-float: 自定义上下浮动动画
+  drop-shadow: 添加白色发光，让幽灵在黑色背景上更明显
+-->
+<div
+  class={`fixed z-0 pointer-events-none animate-ghost-float w-16 sm:w-36 ${positionClass}`}
+  style={`opacity: ${opacity}; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));`}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!--
+      万圣节南瓜帽：深橙色，位于幽灵头顶
+      与黑白主题形成点缀，突出节日气氛
+    -->
+    <g transform="translate(0, -10)">
+      <!-- 南瓜主体 -->
+      <ellipse cx="100" cy="42" rx="38" ry="30" fill="#c2410c" />
+      <!-- 南瓜纹理 -->
+      <path d="M85 22c-5 10-5 40 0 50" stroke="#9a3412" stroke-width="3" stroke-linecap="round" />
+      <path d="M100 18v58" stroke="#9a3412" stroke-width="3" stroke-linecap="round" />
+      <path d="M115 22c5 10 5 40 0 50" stroke="#9a3412" stroke-width="3" stroke-linecap="round" />
+      <!-- 南瓜蒂 -->
+      <path d="M96 16c2 -8 10 -12 16 -10" stroke="#65a30d" stroke-width="5" stroke-linecap="round" fill="none" />
+      <!-- 南瓜眼睛 -->
+      <polygon points="85,38 95,38 90,48" fill="#1a0500" />
+      <polygon points="105,38 115,38 110,48" fill="#1a0500" />
+      <!-- 南瓜嘴巴 -->
+      <path d="M88 52l8 8 8 -8" stroke="#1a0500" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    </g>
+
+    <!-- 幽灵身体：使用纯白色，确保在黑色背景上高对比度可见 -->
+    <path
+      d="M100 20C55.8 20 20 55.8 20 100v100c0 11 8.9 20 20 20 5.5 0 10.5-2.2 14.1-5.9l20-20 20 20c3.6 3.7 8.6 5.9 14.1 5.9s10.5-2.2 14.1-5.9l20-20 20 20c3.6 3.7 8.6 5.9 14.1 5.9 11.1 0 20-8.9 20-20V100c0-44.2-35.8-80-80-80z"
+      fill="#ffffff"
+    />
+    <!-- 左眼 -->
+    <circle cx="70" cy="95" r="11" fill="#000000" />
+    <!-- 右眼 -->
+    <circle cx="130" cy="95" r="11" fill="#000000" />
+    <!-- 微笑嘴巴 -->
+    <path
+      d="M85 125c5 8 25 8 30 0"
+      stroke="#000000"
+      stroke-width="4"
+      stroke-linecap="round"
+    />
+  </svg>
+</div>

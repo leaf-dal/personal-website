@@ -1,0 +1,109 @@
+---
+/**
+ * 关于我页面
+ * 展示个人简介、大一新生身份、技能栈和联系方式。
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import GhostElement from '../components/GhostElement.astro';
+import { SOCIAL_LINKS, SITE_AUTHOR, SITE_DESCRIPTION } from '../constants/site';
+
+// 技能标签列表
+const skillTags = [
+  'HTML5',
+  'CSS3',
+  'JavaScript',
+  'TypeScript',
+  'React',
+  'Vue',
+  'Astro',
+  'Tailwind CSS',
+  'Node.js',
+  'Git',
+  'Python',
+  'AI 工具',
+  '视频剪辑',
+  'PPT 设计'
+];
+---
+
+<BaseLayout title="关于我" description={`了解 ${SITE_AUTHOR} 的背景、技能与联系方式。`}>
+  <section class="relative py-20 sm:py-28">
+    <!-- 左下角幽灵装饰 -->
+    <GhostElement opacity={0.15} positionClass="bottom-32 left-4 sm:left-8" />
+
+    <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <!-- 英文花体加粗标题 -->
+      <SectionTitle
+        title="About Me"
+        subtitle="大一新生 · 技术服务同学 · 持续成长"
+        bold
+      />
+
+      <!-- 个人简介：成熟简练，突出服务同学的心 -->
+      <div class="prose prose-invert mx-auto max-w-none">
+        <p class="text-lg leading-relaxed text-text-secondary">
+          我是 <strong class="text-text-primary">{SITE_AUTHOR}</strong>，
+          一名正在学习计算机与前端开发的<strong class="text-text-primary">大一新生</strong>。
+          我倾向于通过实际项目来巩固所学，也喜欢把整理好的知识、工具与资源分享给身边有需要的同学。
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-text-secondary">
+          {SITE_DESCRIPTION}
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-text-secondary">
+          目前我能为同学们提供的帮助包括：PPT 设计与美化、Python 小工具开发、
+          AI 辅助创作（漫剧、音乐、网站等）、活动视频剪辑，以及四六级、考公、考研、计算机二级等学习资料的整理与分享。
+          如果你有相关需求，欢迎随时联系我。
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-text-secondary">
+          我认为，真正掌握一项技能的标准，是能用它为别人解决问题。
+          希望这个网站不仅能记录我的成长，也能成为服务同学、连接彼此的小小平台。
+        </p>
+      </div>
+
+      <!-- 技能栈 -->
+      <div class="mt-16">
+        <h2 class="text-center text-2xl font-bold text-text-primary sm:text-3xl">
+          技能栈
+        </h2>
+        <p class="mt-3 text-center text-text-secondary">
+          正在持续学习与扩展的技术工具清单
+        </p>
+        <ul class="mt-8 flex flex-wrap justify-center gap-3">
+          {
+            skillTags.map((tag) => (
+              <li class="rounded-full border border-border bg-bg-secondary px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:border-accent hover:text-accent">
+                {tag}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- 联系方式 -->
+      <div class="mt-16 text-center">
+        <h2 class="text-2xl font-bold text-text-primary sm:text-3xl">联系我</h2>
+        <p class="mt-4 text-text-secondary">
+          无论是资料获取、技能交流还是项目合作，都欢迎联系。
+        </p>
+        <ul class="mt-6 flex flex-wrap items-center justify-center gap-6">
+          {
+            SOCIAL_LINKS.map((social) => (
+              <li>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-base font-medium text-accent transition-colors hover:text-accent-hover"
+                  aria-label={social.ariaLabel}
+                >
+                  {social.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

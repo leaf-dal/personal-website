@@ -1,0 +1,68 @@
+---
+/**
+ * 基础布局组件
+ * 所有页面都会包裹在此布局中，统一包含：
+ * - HTML 基础结构（lang、charset、viewport）
+ * - 站点标题与 SEO 描述
+ * - 全局样式引入
+ * - 顶部导航 Header
+ * - 页脚 Footer
+ */
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import { SITE_TITLE } from '../constants/site';
+
+// 定义组件接收的属性类型
+interface BaseLayoutProps {
+  /** 页面标题，会拼接在站点标题之后 */
+  title?: string;
+  /** 页面描述，用于 SEO 与社交分享 */
+  description?: string;
+}
+
+// 解构接收到的 Props，并提供默认值
+const { title, description } = Astro.props as BaseLayoutProps;
+
+// 最终展示的标题：如果有传入 title，则显示为 "页面标题 | 站点标题"
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- 优先使用 SVG 图标，旧浏览器回退到 ICO -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <!-- 引入 Google Fonts：Dancing Script 花体用于英文标题（支持加粗），Noto Sans SC 保证中文显示 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description || '一名热爱技术与设计的大一新生个人网站。'} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <!--
+    min-h-screen: 最小高度撑满视口
+    flex flex-col: 让 Header、main、Footer 垂直排列
+  -->
+  <body class="min-h-screen flex flex-col bg-bg-primary text-text-primary">
+    <Header />
+
+    <!--
+      flex-grow: 让主内容区占据剩余空间，保证 Footer 始终位于底部
+      pt-16: 为固定定位的 Header 留出高度
+    -->
+    <main class="flex-grow pt-16">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

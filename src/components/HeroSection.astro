@@ -28,13 +28,13 @@ import GhostElement from './GhostElement.astro';
       {HERO_SUBTITLE}
     </p>
 
-    <!-- 主标题：打字机效果容器 -->
+    <!-- 主标题：打字机效果容器，文字使用紫粉渐变 -->
     <h1
       id="typewriter-title"
-      class="text-4xl font-extrabold tracking-tight text-text-primary sm:text-5xl md:text-6xl"
+      class="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl"
       data-text={HERO_TITLE}
     >
-      <span class="typewriter-text"></span>
+      <span class="typewriter-text gradient-text"></span>
       <span class="typewriter-cursor" aria-hidden="true">|</span>
     </h1>
 
@@ -50,10 +50,10 @@ import GhostElement from './GhostElement.astro';
 
     <!-- 行动按钮组 -->
     <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <!-- 主按钮：查看项目 -->
+      <!-- 主按钮：查看项目，使用紫粉渐变 -->
       <a
         href="/projects"
-        class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/10"
+        class="btn-primary inline-flex items-center justify-center rounded-lg px-8 py-3 text-base font-semibold"
       >
         查看项目
       </a>

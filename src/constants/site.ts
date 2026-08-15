@@ -47,6 +47,11 @@ export const SOCIAL_LINKS: SocialLink[] = [
     name: '邮箱',
     url: 'mailto:yourname@example.com',
     ariaLabel: '通过邮件联系我'
+  },
+  {
+    name: '电话',
+    url: 'tel:15061265909',
+    ariaLabel: '拨打我的电话 15061265909'
   }
 ];
 

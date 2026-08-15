@@ -10,6 +10,7 @@ import {
   SITE_AUTHOR_PINYIN
 } from '../constants/site';
 import GhostElement from './GhostElement.astro';
+import MagnoliaDecor from './MagnoliaDecor.astro';
 ---
 
 <!--
@@ -21,6 +22,13 @@ import GhostElement from './GhostElement.astro';
 <section class="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 sm:px-6 lg:px-8">
   <!-- 右上角幽灵装饰，为黑白页面增加趣味 -->
   <GhostElement opacity={0.15} positionClass="top-20 right-6 sm:top-16 sm:right-12" />
+
+  <!-- 左上角玉兰花装饰，紫色水彩风格，轻柔浮动 -->
+  <MagnoliaDecor
+    size="sm"
+    animation="float"
+    class="absolute top-24 left-4 z-10 opacity-70 sm:top-20 sm:left-10"
+  />
 
   <div class="relative z-10 mx-auto max-w-3xl text-center">
     <!-- 小标题/标签：身份定位 -->

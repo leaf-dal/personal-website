@@ -9,6 +9,7 @@ import SectionTitle from '../components/SectionTitle.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ResourceCard from '../components/ResourceCard.astro';
 import ButterflyElement from '../components/ButterflyElement.astro';
+import MagnoliaDecor from '../components/MagnoliaDecor.astro';
 import { SITE_DESCRIPTION } from '../constants/site';
 
 // 我的技能数据：成熟简练的表达，突出可提供的实际帮助
@@ -181,6 +182,11 @@ const featuredProjects = [
       </p>
     </div>
   </section>
+
+  <!-- 玉兰花分隔装饰：位于资源区与项目区之间，居中展示 -->
+  <div class="relative z-10 flex justify-center py-6">
+    <MagnoliaDecor size="md" animation="sway" />
+  </div>
 
   <!-- 精选项目区 -->
   <section class="relative z-10 py-20 sm:py-28" aria-labelledby="projects-heading">

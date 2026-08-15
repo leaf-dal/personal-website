@@ -1,0 +1,141 @@
+---
+/**
+ * 玉兰花装饰组件
+ * 使用 SVG 绘制几朵玉兰花，采用紫色渐变模拟水彩质感。
+ * 支持轻微浮动动画，可复用于页面多个位置。
+ */
+interface Props {
+  /**
+   * 装饰尺寸
+   * - sm: 小尺寸，适合页脚、角落
+   * - md: 中等尺寸，适合分隔线
+   * - lg: 大尺寸，适合视觉焦点
+   */
+  size?: 'sm' | 'md' | 'lg';
+  /**
+   * 动画类型
+   * - float: 上下轻微浮动（默认）
+   * - sway: 左右轻微摇摆
+   * - none: 无动画
+   */
+  animation?: 'float' | 'sway' | 'none';
+  /**
+   * 自定义类名
+   */
+  class?: string;
+}
+
+const { size = 'md', animation = 'float', class: className = '' } = Astro.props;
+
+// 根据尺寸返回对应的宽高
+const sizeClasses = {
+  sm: 'h-16 w-auto',
+  md: 'h-28 w-auto',
+  lg: 'h-44 w-auto',
+};
+
+const animationClasses = {
+  float: 'magnolia-float',
+  sway: 'magnolia-sway',
+  none: '',
+};
+---
+
+<div class={`inline-flex ${className}`}>
+  <svg
+    class={`${sizeClasses[size]} ${animationClasses[animation]}`}
+    viewBox="0 0 200 180"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <defs>
+      <!-- 花瓣渐变：淡紫到深紫，模拟水彩晕染 -->
+      <radialGradient id="petal-gradient" cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0%" stop-color="#F3E8FF" />
+        <stop offset="40%" stop-color="#D8B4FE" />
+        <stop offset="100%" stop-color="#A855F7" />
+      </radialGradient>
+
+      <!-- 花萼渐变：淡绿 -->
+      <linearGradient id="calyx-gradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#86EFAC" />
+        <stop offset="100%" stop-color="#22C55E" />
+      </linearGradient>
+
+      <!-- 花茎渐变 -->
+      <linearGradient id="stem-gradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#4ADE80" />
+        <stop offset="100%" stop-color="#16A34A" />
+      </linearGradient>
+    </defs>
+
+    <!-- 花茎：几根柔美曲线 -->
+    <path
+      d="M100 170 Q95 130 100 100"
+      stroke="url(#stem-gradient)"
+      stroke-width="2"
+      stroke-linecap="round"
+      opacity="0.7"
+    />
+    <path
+      d="M100 135 Q75 110 55 90"
+      stroke="url(#stem-gradient)"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      opacity="0.6"
+    />
+    <path
+      d="M100 120 Q130 95 150 75"
+      stroke="url(#stem-gradient)"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      opacity="0.6"
+    />
+
+    <!-- 左侧玉兰花 -->
+    <g transform="translate(35, 45) rotate(-15)">
+      <ellipse cx="0" cy="-18" rx="14" ry="28" fill="url(#petal-gradient)" opacity="0.9" />
+      <ellipse cx="-14" cy="-8" rx="12" ry="24" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(-40)" />
+      <ellipse cx="14" cy="-8" rx="12" ry="24" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(40)" />
+      <ellipse cx="0" cy="8" rx="10" ry="14" fill="url(#calyx-gradient)" opacity="0.7" />
+    </g>
+
+    <!-- 中间主玉兰花（最大） -->
+    <g transform="translate(100, 35)">
+      <ellipse cx="0" cy="-22" rx="18" ry="34" fill="url(#petal-gradient)" opacity="0.95" />
+      <ellipse cx="-17" cy="-10" rx="14" ry="28" fill="url(#petal-gradient)" opacity="0.9" transform="rotate(-35)" />
+      <ellipse cx="17" cy="-10" rx="14" ry="28" fill="url(#petal-gradient)" opacity="0.9" transform="rotate(35)" />
+      <ellipse cx="-10" cy="12" rx="11" ry="20" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(-20)" />
+      <ellipse cx="10" cy="12" rx="11" ry="20" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(20)" />
+      <ellipse cx="0" cy="10" rx="12" ry="16" fill="url(#calyx-gradient)" opacity="0.75" />
+    </g>
+
+    <!-- 右侧玉兰花 -->
+    <g transform="translate(160, 55) rotate(12)">
+      <ellipse cx="0" cy="-16" rx="13" ry="26" fill="url(#petal-gradient)" opacity="0.9" />
+      <ellipse cx="-13" cy="-6" rx="11" ry="22" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(-38)" />
+      <ellipse cx="13" cy="-6" rx="11" ry="22" fill="url(#petal-gradient)" opacity="0.85" transform="rotate(38)" />
+      <ellipse cx="0" cy="8" rx="9" ry="12" fill="url(#calyx-gradient)" opacity="0.7" />
+    </g>
+
+    <!-- 顶部小花苞 -->
+    <g transform="translate(125, 20) rotate(8)">
+      <ellipse cx="0" cy="-8" rx="7" ry="14" fill="url(#petal-gradient)" opacity="0.8" />
+      <ellipse cx="-6" cy="-2" rx="5" ry="10" fill="url(#petal-gradient)" opacity="0.75" transform="rotate(-35)" />
+      <ellipse cx="6" cy="-2" rx="5" ry="10" fill="url(#petal-gradient)" opacity="0.75" transform="rotate(35)" />
+    </g>
+
+    <!-- 点缀的小叶子 -->
+    <path
+      d="M70 130 Q55 120 60 105 Q75 115 70 130"
+      fill="#86EFAC"
+      opacity="0.5"
+    />
+    <path
+      d="M140 125 Q155 115 150 100 Q135 110 140 125"
+      fill="#86EFAC"
+      opacity="0.5"
+    />
+  </svg>
+</div>

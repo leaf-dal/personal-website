@@ -5,6 +5,7 @@
  * 下方展示 Sternstunden 诗意文字、版权信息与社交链接。
  */
 import { SOCIAL_LINKS, SITE_AUTHOR } from '../constants/site';
+import MagnoliaDecor from './MagnoliaDecor.astro';
 ---
 
 <!--
@@ -14,8 +15,12 @@ import { SOCIAL_LINKS, SITE_AUTHOR } from '../constants/site';
 -->
 <footer class="bg-[#2C1810] py-12 text-[#F5E6D3]">
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <!-- 狮子侧脸线稿：极简线条风格，面朝右 -->
-    <div class="mx-auto mb-8 flex justify-center">
+    <!-- 狮子与玉兰花组合：狮子侧脸线稿 + 紫色玉兰花装饰 -->
+    <div class="mx-auto mb-8 flex items-end justify-center gap-4 sm:gap-6">
+      <!-- 玉兰花装饰：位于狮子左侧，小尺寸浮动 -->
+      <MagnoliaDecor size="sm" animation="float" />
+
+      <!-- 狮子侧脸线稿：极简线条风格，面朝右 -->
       <svg
         class="h-24 w-auto opacity-90 sm:h-32"
         viewBox="0 0 200 160"

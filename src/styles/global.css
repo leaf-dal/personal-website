@@ -138,6 +138,40 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   玉兰花装饰动画
+   - float: 轻柔上下浮动，像花瓣随风飘荡
+   - sway: 左右轻微摇摆
+   -------------------------------------------------------------------------- */
+@keyframes magnolia-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes magnolia-sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.magnolia-float {
+  animation: magnolia-float 5s ease-in-out infinite;
+}
+
+.magnolia-sway {
+  animation: magnolia-sway 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* --------------------------------------------------------------------------
    导航链接样式
    - Inter 300 细体字，字母间距拉大，营造冷静疏离感
    - 悬停时底部从左向右划出锋利蓝灰色线条

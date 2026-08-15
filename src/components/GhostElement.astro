@@ -7,14 +7,14 @@
  */
 
 interface GhostElementProps {
-  /** 不透明度，默认 0.9，确保在黑色背景上清晰可见 */
+  /** 不透明度，默认 0.85，确保在浅紫背景上清晰可见 */
   opacity?: number;
   /** CSS 定位类名，例如 "top-20 right-10" */
   positionClass?: string;
 }
 
 const {
-  opacity = 0.9,
+  opacity = 0.85,
   positionClass = 'top-24 right-8'
 } = Astro.props as GhostElementProps;
 ---
@@ -28,7 +28,7 @@ const {
 -->
 <div
   class={`fixed z-0 pointer-events-none animate-ghost-float w-16 sm:w-36 ${positionClass}`}
-  style={`opacity: ${opacity}; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));`}
+  style={`opacity: ${opacity}; filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.35));`}
   aria-hidden="true"
 >
   <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,19 +52,20 @@ const {
       <path d="M88 52l8 8 8 -8" stroke="#1a0500" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
     </g>
 
-    <!-- 幽灵身体：使用纯白色，确保在黑色背景上高对比度可见 -->
+    <!-- 幽灵身体：使用半透明紫色，确保在浅紫背景上可见且协调 -->
     <path
       d="M100 20C55.8 20 20 55.8 20 100v100c0 11 8.9 20 20 20 5.5 0 10.5-2.2 14.1-5.9l20-20 20 20c3.6 3.7 8.6 5.9 14.1 5.9s10.5-2.2 14.1-5.9l20-20 20 20c3.6 3.7 8.6 5.9 14.1 5.9 11.1 0 20-8.9 20-20V100c0-44.2-35.8-80-80-80z"
-      fill="#ffffff"
+      fill="#E9D5FF"
+      fill-opacity="0.9"
     />
     <!-- 左眼 -->
-    <circle cx="70" cy="95" r="11" fill="#000000" />
+    <circle cx="70" cy="95" r="11" fill="#5B21B6" />
     <!-- 右眼 -->
-    <circle cx="130" cy="95" r="11" fill="#000000" />
+    <circle cx="130" cy="95" r="11" fill="#5B21B6" />
     <!-- 微笑嘴巴 -->
     <path
       d="M85 125c5 8 25 8 30 0"
-      stroke="#000000"
+      stroke="#5B21B6"
       stroke-width="4"
       stroke-linecap="round"
     />

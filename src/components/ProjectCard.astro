@@ -52,7 +52,7 @@ function getTagColorClass(tag: string): string {
   cursor-pointer: 当关联了模态框时，提示用户可点击
 -->
 <article
-  class={`project-card group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-secondary transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl hover:shadow-white/5 ${modalId ? 'cursor-pointer' : ''}`}
+  class={`project-card group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-secondary transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/5 ${modalId ? 'cursor-pointer' : ''}`}
   {...(modalId ? { 'data-modal-target': modalId } : {})}
 >
   <div class="flex flex-1 flex-col p-6">

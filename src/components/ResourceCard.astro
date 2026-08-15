@@ -31,7 +31,7 @@ const { icon, title, items } = Astro.props as ResourceCardProps;
   hover:border-accent/50: 悬停时边框变亮
 -->
 <article
-  class="resource-card group rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-white/5"
+  class="resource-card group rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-accent/5"
   data-resource-title={title}
   data-resource-items={items.map((item) => item.name).join(' ')}
 >

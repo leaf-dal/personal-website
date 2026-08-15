@@ -138,6 +138,34 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   导航链接样式
+   - Inter 300 细体字，字母间距拉大，营造冷静疏离感
+   - 悬停时底部从左向右划出锋利蓝灰色线条
+   -------------------------------------------------------------------------- */
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #64748b; /* 蓝灰色，像黑夜中划过的轨迹 */
+  transition: width 0.35s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
    渐变文字：用于首页主标题，紫到粉渐变
    -------------------------------------------------------------------------- */
 .gradient-text {

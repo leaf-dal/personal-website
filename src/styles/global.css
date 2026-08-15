@@ -286,56 +286,6 @@ body {
   }
 }
 
-/* 星星轨迹点：小白点，通过不同延迟跟随蝴蝶路径 */
-.star {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4px;
-  height: 4px;
-  margin-top: -2px;
-  margin-left: -2px;
-  border-radius: 50%;
-  background-color: #C4B5FD;
-  box-shadow: 0 0 6px 1px rgba(124, 58, 237, 0.45);
-  opacity: 0;
-  animation: star-trail 18s linear infinite;
-}
-
-/* 第二只蝴蝶的星星轨迹使用更长周期 */
-.butterfly-2 .star {
-  animation-duration: 22s;
-}
-
-/* 为每个星星设置递增的延迟，形成拖尾效果 */
-.butterfly-wrapper .star:nth-child(2) { animation-delay: 0.2s; }
-.butterfly-wrapper .star:nth-child(3) { animation-delay: 0.4s; }
-.butterfly-wrapper .star:nth-child(4) { animation-delay: 0.6s; }
-.butterfly-wrapper .star:nth-child(5) { animation-delay: 0.8s; }
-.butterfly-wrapper .star:nth-child(6) { animation-delay: 1.0s; }
-.butterfly-wrapper .star:nth-child(7) { animation-delay: 1.2s; }
-.butterfly-wrapper .star:nth-child(8) { animation-delay: 1.4s; }
-.butterfly-wrapper .star:nth-child(9) { animation-delay: 1.6s; }
-
-/* 星星轨迹关键帧：与对应蝴蝶路径一致，但通过延迟落后 */
-.butterfly-1 .star {
-  animation-name: star-path-1;
-}
-
-.butterfly-2 .star {
-  animation-name: star-path-2;
-}
-
-.butterfly-3 .star {
-  animation-name: star-path-3;
-  animation-duration: 20s;
-}
-
-.butterfly-4 .star {
-  animation-name: star-path-4;
-  animation-duration: 24s;
-}
-
 /* 第一只蝴蝶的飞行路径 */
 @keyframes butterfly-path-1 {
   0% {
@@ -358,38 +308,6 @@ body {
   }
 }
 
-/* 第一只蝴蝶星星的轨迹（与蝴蝶路径一致，但由 animation-delay 产生滞后） */
-@keyframes star-path-1 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  2% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  20% {
-    opacity: 0.8;
-    transform: translate(20vw, -25vh) scale(0.8);
-  }
-  40% {
-    opacity: 0.6;
-    transform: translate(45vw, -10vh) scale(0.6);
-  }
-  60% {
-    opacity: 0.4;
-    transform: translate(30vw, -35vh) scale(0.4);
-  }
-  80% {
-    opacity: 0.2;
-    transform: translate(10vw, -20vh) scale(0.2);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-}
-
 /* 第二只蝴蝶的飞行路径 */
 @keyframes butterfly-path-2 {
   0% {
@@ -409,34 +327,6 @@ body {
   }
 }
 
-/* 第二只蝴蝶星星的轨迹 */
-@keyframes star-path-2 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  2% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    opacity: 0.8;
-    transform: translate(-25vw, 20vh) scale(0.8);
-  }
-  50% {
-    opacity: 0.6;
-    transform: translate(-40vw, 40vh) scale(0.4);
-  }
-  75% {
-    opacity: 0.2;
-    transform: translate(-15vw, 55vh) scale(0.2);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-}
-
 /* 第三只蝴蝶的飞行路径 */
 @keyframes butterfly-path-3 {
   0% {
@@ -453,34 +343,6 @@ body {
   }
   100% {
     transform: translate(0, 0) rotate(0deg);
-  }
-}
-
-/* 第三只蝴蝶星星的轨迹 */
-@keyframes star-path-3 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  2% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    opacity: 0.8;
-    transform: translate(-30vw, -15vh) scale(0.8);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translate(-20vw, -35vh) scale(0.5);
-  }
-  75% {
-    opacity: 0.2;
-    transform: translate(-45vw, -20vh) scale(0.2);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
   }
 }
 
@@ -506,34 +368,3 @@ body {
   }
 }
 
-/* 第四只蝴蝶星星的轨迹 */
-@keyframes star-path-4 {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-  2% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  20% {
-    opacity: 0.8;
-    transform: translate(25vw, 10vh) scale(0.8);
-  }
-  40% {
-    opacity: 0.6;
-    transform: translate(40vw, -10vh) scale(0.5);
-  }
-  60% {
-    opacity: 0.3;
-    transform: translate(55vw, 15vh) scale(0.3);
-  }
-  80% {
-    opacity: 0.1;
-    transform: translate(30vw, 25vh) scale(0.1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0);
-  }
-}

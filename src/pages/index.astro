@@ -128,6 +128,30 @@ const featuredProjects = [
     </div>
   </section>
 
+  <!-- 我的成就区：先空着，等待用户上传照片后填充 -->
+  <section class="relative z-10 py-20 sm:py-28" aria-labelledby="achievements-heading">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <SectionTitle
+        title="My Achievements"
+        subtitle="我的成就"
+      />
+
+      <!--
+        成就展示占位区：
+        目前为空，后续可将照片/证书/奖项卡片放入此网格中。
+        使用虚线边框与柔和提示文字，保持视觉轻盈不突兀。
+      -->
+      <div
+        id="achievements-grid"
+        class="grid min-h-[200px] place-items-center rounded-2xl border-2 border-dashed border-border bg-bg-secondary/30"
+      >
+        <p class="text-center text-text-muted">
+          成就照片与证书将在后续补充到这里
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- 我的资源区 -->
   <section class="relative z-10 py-20 sm:py-28 bg-bg-secondary/50" aria-labelledby="resources-heading">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

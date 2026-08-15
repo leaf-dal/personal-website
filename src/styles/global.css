@@ -48,14 +48,22 @@ html {
 }
 
 body {
-  /* 使用系统默认无衬线字体，优先保证中文显示效果 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
-    sans-serif;
+  /*
+    字体栈：
+    - Inter 用于英文与数字，现代简洁
+    - Noto Sans SC（思源黑体）用于中文，清晰易读
+    - 后续为系统字体回退，确保加载失败时仍有良好体验
+  */
+  font-family: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
 
   /* 背景与文字颜色使用主题变量，方便后期统一调整 */
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+
+  /* 正文行高 1.7，提升长文阅读舒适度 */
+  line-height: 1.7;
 
   /* 防止水平滚动条出现 */
   overflow-x: hidden;

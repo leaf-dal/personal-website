@@ -1,8 +1,22 @@
 ---
 /**
  * 项目卡片组件
- * 用于首页精选项目区与项目展示页，支持标题、描述、技术标签和外链。
+ * 用于首页精选项目区与项目展示页，支持标题、描述、技术标签、外链与在线预览。
  */
+
+// 技术栈标签颜色映射：为常见技术分配辨识度高的颜色
+const TAG_COLORS: Record<string, string> = {
+  Astro: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+  'Tailwind CSS': 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+  TypeScript: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+  React: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+  Vue: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+  'REST API': 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+  ECharts: 'bg-red-500/15 text-red-300 border-red-500/30',
+  LocalStorage: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+  Marked: 'bg-pink-500/15 text-pink-300 border-pink-500/30',
+  Responsive: 'bg-teal-500/15 text-teal-300 border-teal-500/30'
+};
 
 // 项目卡片 Props 类型
 interface ProjectCardProps {
@@ -12,36 +26,39 @@ interface ProjectCardProps {
   description: string;
   /** 技术标签数组 */
   tags: string[];
-  /** 项目链接地址（可选） */
+  /** 项目链接地址（GitHub 等） */
   link?: string;
+  /** 在线预览地址 */
+  demoUrl?: string;
+  /** 关联的模态框 ID，传入后卡片可点击打开详情 */
+  modalId?: string;
 }
 
-const { title, description, tags, link } = Astro.props as ProjectCardProps;
+const { title, description, tags, link, demoUrl, modalId } = Astro.props as ProjectCardProps;
+
+/**
+ * 获取标签对应的彩色样式类
+ * 若标签未在映射中定义，则返回默认灰色调样式
+ */
+function getTagColorClass(tag: string): string {
+  return TAG_COLORS[tag] || 'bg-bg-primary text-text-secondary border-border';
+}
 ---
 
 <!--
   group: 启用子元素在父元素悬停时的联动样式
   hover:-translate-y-1: 悬停时轻微上浮
   hover:shadow-xl: 悬停时增强阴影
+  cursor-pointer: 当关联了模态框时，提示用户可点击
 -->
 <article
-  class="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-secondary transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20"
+  class={`project-card group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-bg-secondary transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl hover:shadow-white/5 ${modalId ? 'cursor-pointer' : ''}`}
+  {...(modalId ? { 'data-modal-target': modalId } : {})}
 >
   <div class="flex flex-1 flex-col p-6">
     <!-- 项目标题 -->
     <h3 class="text-xl font-bold text-text-primary">
-      {link ? (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="transition-colors hover:text-accent"
-        >
-          {title}
-        </a>
-      ) : (
-        title
-      )}
+      {title}
     </h3>
 
     <!-- 项目描述 -->
@@ -49,15 +66,43 @@ const { title, description, tags, link } = Astro.props as ProjectCardProps;
       {description}
     </p>
 
-    <!-- 技术标签 -->
+    <!-- 技术栈标签：彩色小标签 -->
     <ul class="mt-5 flex flex-wrap gap-2">
       {
         tags.map((tag) => (
-          <li class="rounded-full bg-bg-primary px-3 py-1 text-xs font-medium text-accent">
+          <li class={`rounded-full border px-3 py-1 text-xs font-medium ${getTagColorClass(tag)}`}>
             {tag}
           </li>
         ))
       }
     </ul>
+
+    <!-- 操作按钮组：预览 + 查看代码 -->
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      {
+        demoUrl && (
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-bg-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover"
+          >
+            在线预览
+          </a>
+        )
+      }
+      {
+        link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+          >
+            查看代码
+          </a>
+        )
+      }
+    </div>
   </div>
 </article>

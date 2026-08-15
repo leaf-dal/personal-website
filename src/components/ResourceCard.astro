@@ -1,40 +1,66 @@
 ---
 /**
  * 资源卡片组件
- * 用于"我的资源"板块，展示学习资料类别与具体内容。
+ * 用于"我的资源"板块，展示带图标的资源类别、具体资料列表与跳转/下载按钮。
  */
+
+// 资源项类型：每个资料包含名称与访问地址
+interface ResourceItem {
+  /** 资料名称 */
+  name: string;
+  /** 资料访问地址（下载链接或详情页） */
+  url: string;
+}
 
 // 资源卡片 Props 类型
 interface ResourceCardProps {
+  /** 资源类别图标（emoji 或 SVG） */
+  icon: string;
   /** 资源类别标题 */
   title: string;
   /** 该类别下的具体资料列表 */
-  items: string[];
+  items: ResourceItem[];
 }
 
-const { title, items } = Astro.props as ResourceCardProps;
+const { icon, title, items } = Astro.props as ResourceCardProps;
 ---
 
 <!--
   group: 启用子元素联动样式
+  hover:-translate-y-1: 悬停时轻微上浮
   hover:border-accent/50: 悬停时边框变亮
 -->
 <article
-  class="group rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:border-accent/50"
+  class="resource-card group rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-white/5"
+  data-resource-title={title}
+  data-resource-items={items.map((item) => item.name).join(' ')}
 >
-  <!-- 卡片标题 -->
-  <h3 class="text-lg font-bold text-text-primary">
-    {title}
-  </h3>
+  <!-- 卡片头部：图标 + 标题 -->
+  <div class="flex items-center gap-3">
+    <span class="text-3xl" aria-hidden="true">{icon}</span>
+    <h3 class="text-lg font-bold text-text-primary">
+      {title}
+    </h3>
+  </div>
 
   <!-- 资源列表 -->
-  <ul class="mt-4 space-y-2">
+  <ul class="mt-5 space-y-3">
     {
       items.map((item) => (
-        <li class="flex items-start gap-2 text-base text-text-secondary">
-          <!-- 列表前的小圆点标记 -->
-          <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
-          <span>{item}</span>
+        <li class="flex items-center justify-between gap-3 text-base text-text-secondary">
+          <div class="flex items-start gap-2 min-w-0">
+            <!-- 列表前的小圆点标记 -->
+            <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
+            <span class="leading-relaxed">{item.name}</span>
+          </div>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex-shrink-0 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            查看
+          </a>
         </li>
       ))
     }

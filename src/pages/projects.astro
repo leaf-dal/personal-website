@@ -6,51 +6,76 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import ProjectModal from '../components/ProjectModal.astro';
 import { SITE_AUTHOR } from '../constants/site';
 
 // 项目列表数据：后续可迁移至独立数据文件或内容集合
 const projectList = [
   {
+    id: 'blog',
     title: '个人博客系统',
     description:
-      '一款基于 Astro 构建的静态博客，支持 Markdown 写作、标签分类、暗色模式与响应式布局。通过这个项目，我完整体验了从页面设计、组件拆分到构建部署的现代前端开发流程，兼顾了加载速度与 SEO 表现。',
+      '一款基于 Astro 构建的静态博客，支持 Markdown 写作、标签分类、暗色模式与响应式布局。',
+    detailDescription:
+      '通过这个项目，我完整体验了从页面设计、组件拆分到构建部署的现代前端开发流程，兼顾了加载速度与 SEO 表现。项目采用文件式路由，文章内容使用 Markdown 编写，配合 frontmatter 实现标题、日期、标签等元数据管理。',
     tags: ['Astro', 'Tailwind CSS', 'TypeScript'],
-    link: 'https://github.com/yourname/blog'
+    link: 'https://github.com/yourname/blog',
+    demoUrl: '/'
   },
   {
+    id: 'todo',
     title: '任务管理面板',
     description:
-      '一个轻量级的任务管理工具，支持拖拽排序、标签筛选与本地数据持久化。在开发过程中，我深入理解了状态管理、用户交互反馈以及数据存储之间的协作方式，也锻炼了组件化思维能力。',
+      '一个轻量级的任务管理工具，支持拖拽排序、标签筛选与本地数据持久化。',
+    detailDescription:
+      '在开发过程中，我深入理解了状态管理、用户交互反馈以及数据存储之间的协作方式，也锻炼了组件化思维能力。所有任务数据保存在浏览器 LocalStorage 中，刷新页面后依然保留。',
     tags: ['React', 'TypeScript', 'LocalStorage'],
-    link: 'https://github.com/yourname/todo-board'
+    link: 'https://github.com/yourname/todo-board',
+    demoUrl: '#'
   },
   {
+    id: 'weather',
     title: '天气预报小程序',
     description:
-      '调用公开天气 API 实现的城市天气查询应用，支持城市搜索、未来七天 forecast 与温度趋势图展示。这个项目帮助我熟悉了异步数据请求、错误处理以及数据可视化的基本表达方式。',
+      '调用公开天气 API 实现的城市天气查询应用，支持城市搜索、未来七天 forecast 与温度趋势图展示。',
+    detailDescription:
+      '这个项目帮助我熟悉了异步数据请求、错误处理以及数据可视化的基本表达方式。用户输入城市名后，应用会调用第三方天气接口，并将未来七天的温度变化以折线图形式呈现。',
     tags: ['Vue', 'REST API', 'ECharts'],
-    link: 'https://github.com/yourname/weather-app'
+    link: 'https://github.com/yourname/weather-app',
+    demoUrl: '#'
   },
   {
+    id: 'markdown',
     title: '在线 Markdown 编辑器',
     description:
-      '一个支持实时预览、本地自动保存与 HTML 导出的轻量级 Markdown 编辑器。在实现过程中，我学习了文本解析、编辑器状态同步以及用户体验细节打磨的重要性。',
+      '一个支持实时预览、本地自动保存与 HTML 导出的轻量级 Markdown 编辑器。',
+    detailDescription:
+      '在实现过程中，我学习了文本解析、编辑器状态同步以及用户体验细节打磨的重要性。左侧编辑，右侧实时预览，并支持一键导出为 HTML 文件。',
     tags: ['React', 'Marked', 'Tailwind CSS'],
-    link: 'https://github.com/yourname/markdown-editor'
+    link: 'https://github.com/yourname/markdown-editor',
+    demoUrl: '#'
   },
   {
+    id: 'portfolio',
     title: '个人作品集网站',
     description:
-      '也就是你现在看到的这个网站。它采用 Astro + Tailwind CSS 构建，追求极简的深色风格、清晰的模块化结构以及流畅的响应式体验，是我学习前端以来最完整的一次实践。',
+      '也就是你现在看到的这个网站。它采用 Astro + Tailwind CSS 构建，追求极简的深色风格。',
+    detailDescription:
+      '清晰的模块化结构以及流畅的响应式体验，是我学习前端以来最完整的一次实践。网站包含首页、关于我、项目展示等页面，并使用 Tailwind CSS 实现黑白极简主题。',
     tags: ['Astro', 'Tailwind CSS', 'Responsive'],
-    link: '/'
+    link: '/',
+    demoUrl: '/'
   },
   {
+    id: 'dashboard',
     title: '数据可视化仪表盘',
     description:
-      '一个用于展示业务关键指标的仪表盘原型，支持多维度筛选与图表联动。通过这个项目，我初步接触了数据驱动的前端设计思路，也体会到清晰的数据表达对于决策支持的价值。',
+      '一个用于展示业务关键指标的仪表盘原型，支持多维度筛选与图表联动。',
+    detailDescription:
+      '通过这个项目，我初步接触了数据驱动的前端设计思路，也体会到清晰的数据表达对于决策支持的价值。图表使用 ECharts 渲染，支持按时间维度筛选与指标联动。',
     tags: ['Vue', 'ECharts', 'REST API'],
-    link: 'https://github.com/yourname/dashboard'
+    link: 'https://github.com/yourname/dashboard',
+    demoUrl: '#'
   }
 ];
 ---
@@ -67,7 +92,7 @@ const projectList = [
       />
 
       <!-- 项目卡片网格：移动端单列，md 双列，lg 三列 -->
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3" id="project-grid">
         {
           projectList.map((project) => (
             <ProjectCard
@@ -75,10 +100,90 @@ const projectList = [
               description={project.description}
               tags={project.tags}
               link={project.link}
+              demoUrl={project.demoUrl}
+              modalId={project.id}
             />
           ))
         }
       </div>
+
+      <!-- 项目详情模态框：每个项目对应一个 -->
+      {
+        projectList.map((project) => (
+          <ProjectModal
+            id={project.id}
+            title={project.title}
+            description={project.description}
+            detailDescription={project.detailDescription}
+            tags={project.tags}
+            link={project.link}
+            demoUrl={project.demoUrl}
+          />
+        ))
+      }
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  /**
+   * 项目卡片模态框交互控制
+   * - 点击卡片任意位置打开对应模态框
+   * - 点击关闭按钮、遮罩层背景或按 ESC 键关闭模态框
+   */
+  const cards = document.querySelectorAll<HTMLElement>('.project-card[data-modal-target]');
+  const modals = document.querySelectorAll<HTMLElement>('.project-modal');
+
+  /** 打开指定模态框 */
+  function openModal(modalId: string): void {
+    const modal = document.getElementById(`project-modal-${modalId}`);
+    if (!modal) return;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  /** 关闭所有模态框 */
+  function closeAllModals(): void {
+    modals.forEach((modal) => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+    document.body.style.overflow = '';
+  }
+
+  // 点击卡片打开对应模态框
+  cards.forEach((card) => {
+    card.addEventListener('click', (event) => {
+      // 如果点击的是卡片内的链接按钮，不触发模态框，直接跳转
+      const target = event.target as HTMLElement;
+      if (target.closest('a')) return;
+
+      const modalId = card.getAttribute('data-modal-target');
+      if (modalId) openModal(modalId);
+    });
+  });
+
+  // 模态框内部关闭事件
+  modals.forEach((modal) => {
+    const closeButton = modal.querySelector('.project-modal-close');
+
+    // 关闭按钮
+    closeButton?.addEventListener('click', closeAllModals);
+
+    // 点击遮罩层背景关闭
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeAllModals();
+      }
+    });
+  });
+
+  // ESC 键关闭
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeAllModals();
+    }
+  });
+</script>

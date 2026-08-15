@@ -28,13 +28,18 @@ import GhostElement from './GhostElement.astro';
       {HERO_SUBTITLE}
     </p>
 
-    <!-- 主标题 -->
-    <h1 class="text-4xl font-extrabold tracking-tight text-text-primary sm:text-5xl md:text-6xl">
-      {HERO_TITLE}
+    <!-- 主标题：打字机效果容器 -->
+    <h1
+      id="typewriter-title"
+      class="text-4xl font-extrabold tracking-tight text-text-primary sm:text-5xl md:text-6xl"
+      data-text={HERO_TITLE}
+    >
+      <span class="typewriter-text"></span>
+      <span class="typewriter-cursor" aria-hidden="true">|</span>
     </h1>
 
-    <!-- 拼音标注：使用等宽字体，置于姓名下方 -->
-    <p class="mt-3 text-sm font-medium tracking-[0.3em] text-text-muted sm:text-base font-mono">
+    <!-- 拼音标注：全大写 + 加宽字间距，增强设计感 -->
+    <p class="mt-3 text-sm font-medium uppercase tracking-[0.5em] text-text-muted sm:text-base">
       {SITE_AUTHOR_PINYIN}
     </p>
 
@@ -48,7 +53,7 @@ import GhostElement from './GhostElement.astro';
       <!-- 主按钮：查看项目 -->
       <a
         href="/projects"
-        class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
+        class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
       >
         查看项目
       </a>
@@ -56,10 +61,61 @@ import GhostElement from './GhostElement.astro';
       <!-- 次按钮：了解更多 -->
       <a
         href="/about"
-        class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all hover:border-accent hover:text-accent"
+        class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-lg hover:shadow-white/5"
       >
         了解更多
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  /* 打字机光标闪烁动画 */
+  .typewriter-cursor {
+    display: inline-block;
+    width: 0.08em;
+    color: var(--color-accent);
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * 首页标题打字机效果
+   * 页面加载后逐字显示标题，营造科技感。
+   */
+  const titleEl = document.getElementById('typewriter-title');
+  const textEl = titleEl?.querySelector('.typewriter-text');
+  const fullText = titleEl?.getAttribute('data-text') || '';
+
+  /** 当前已显示的字符索引 */
+  let charIndex = 0;
+
+  /**
+   * 逐字追加到显示区域
+   * 每个字符间隔 120ms，兼顾节奏感与可读性。
+   */
+  function typeNextChar(): void {
+    if (!textEl || charIndex >= fullText.length) return;
+
+    textEl.textContent += fullText.charAt(charIndex);
+    charIndex += 1;
+
+    if (charIndex < fullText.length) {
+      setTimeout(typeNextChar, 120);
+    }
+  }
+
+  // 延迟 300ms 开始打字，让页面其他元素先完成渲染
+  setTimeout(typeNextChar, 300);
+</script>

@@ -35,19 +35,33 @@ const skillItems = [
   }
 ];
 
-// 我的资源数据：服务同学的学习资料整理
+// 我的资源数据：按类别组织学习资料，每项包含查看链接
 const resourceItems = [
   {
+    icon: '📚',
     title: '语言考试',
-    items: ['大学英语四级资料', '大学英语六级资料', '雅思备考资料']
+    items: [
+      { name: '大学英语四级资料', url: '#' },
+      { name: '大学英语六级资料', url: '#' },
+      { name: '雅思备考资料', url: '#' }
+    ]
   },
   {
+    icon: '🎓',
     title: '升学与就业',
-    items: ['公务员考试资料', '考研复习资料', '本专业大学专业规划']
+    items: [
+      { name: '公务员考试资料', url: '#' },
+      { name: '考研复习资料', url: '#' },
+      { name: '本专业大学专业规划', url: '#' }
+    ]
   },
   {
+    icon: '💻',
     title: '计算机与实用技能',
-    items: ['计算机二级考试资料', '电脑常见问题解决策略']
+    items: [
+      { name: '计算机二级考试资料', url: '#' },
+      { name: '电脑常见问题解决策略', url: '#' }
+    ]
   }
 ];
 
@@ -99,7 +113,7 @@ const featuredProjects = [
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {
           skillItems.map((skill) => (
-            <div class="rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:border-accent/50">
+            <div class="rounded-xl border border-border bg-bg-secondary p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-white/5">
               <h3 id="skills-heading" class="text-lg font-bold text-text-primary">
                 {skill.title}
               </h3>
@@ -121,17 +135,50 @@ const featuredProjects = [
         subtitle="整理的学习资料，希望能为同学们的备考与成长提供一些帮助"
       />
 
+      <!-- 资源搜索框：实时过滤卡片与资料项 -->
+      <div class="mx-auto mb-10 max-w-md">
+        <label for="resource-search" class="sr-only">搜索资源</label>
+        <div class="relative">
+          <input
+            id="resource-search"
+            type="text"
+            placeholder="搜索资料，如：四级、考研、计算机..."
+            class="w-full rounded-xl border border-border bg-bg-secondary px-5 py-3 pl-11 text-text-primary placeholder-text-muted outline-none transition-colors focus:border-accent"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-text-muted"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+      </div>
+
       <!-- 资源卡片网格：移动端单列，md 双列，lg 三列 -->
-      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div id="resource-grid" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {
           resourceItems.map((resource) => (
             <ResourceCard
+              icon={resource.icon}
               title={resource.title}
               items={resource.items}
             />
           ))
         }
       </div>
+
+      <!-- 搜索无结果提示 -->
+      <p id="resource-no-results" class="hidden text-center text-text-muted">
+        未找到匹配的资料，换个关键词试试～
+      </p>
     </div>
   </section>
 
@@ -172,7 +219,7 @@ const featuredProjects = [
   <!-- 底部行动召唤区 -->
   <section class="relative z-10 py-20 sm:py-28">
     <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+      <h2 class="text-4xl font-bold tracking-tight text-text-primary sm:text-5xl">
         期待与你交流
       </h2>
       <p class="mt-4 text-lg text-text-secondary">
@@ -181,7 +228,7 @@ const featuredProjects = [
       <div class="mt-8">
         <a
           href="/about"
-          class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
+          class="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-base font-semibold text-bg-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-lg hover:shadow-white/10"
         >
           联系我
         </a>
@@ -189,3 +236,44 @@ const featuredProjects = [
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  /**
+   * 资源搜索过滤逻辑
+   * 根据输入关键词实时匹配资源类别标题与资料项名称。
+   */
+  const searchInput = document.getElementById('resource-search') as HTMLInputElement | null;
+  const resourceGrid = document.getElementById('resource-grid');
+  const resourceCards = document.querySelectorAll<HTMLElement>('.resource-card');
+  const noResultsMessage = document.getElementById('resource-no-results');
+
+  /** 处理搜索输入 */
+  function handleSearch(): void {
+    if (!searchInput || !resourceGrid || !noResultsMessage) return;
+
+    const keyword = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    resourceCards.forEach((card) => {
+      const title = card.getAttribute('data-resource-title')?.toLowerCase() || '';
+      const items = card.getAttribute('data-resource-items')?.toLowerCase() || '';
+      const isMatch = title.includes(keyword) || items.includes(keyword);
+
+      if (isMatch || keyword === '') {
+        card.classList.remove('hidden');
+        visibleCount += 1;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    // 没有匹配结果时显示提示文案
+    if (visibleCount === 0 && keyword !== '') {
+      noResultsMessage.classList.remove('hidden');
+    } else {
+      noResultsMessage.classList.add('hidden');
+    }
+  }
+
+  searchInput?.addEventListener('input', handleSearch);
+</script>

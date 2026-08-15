@@ -1,0 +1,145 @@
+---
+/**
+ * 项目详情模态框组件
+ * 点击项目卡片后弹出，展示更完整的项目介绍、技术栈与操作链接。
+ */
+
+// 技术栈标签颜色映射，与 ProjectCard 保持一致
+const TAG_COLORS: Record<string, string> = {
+  Astro: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+  'Tailwind CSS': 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+  TypeScript: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+  React: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+  Vue: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+  'REST API': 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+  ECharts: 'bg-red-500/15 text-red-300 border-red-500/30',
+  LocalStorage: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+  Marked: 'bg-pink-500/15 text-pink-300 border-pink-500/30',
+  Responsive: 'bg-teal-500/15 text-teal-300 border-teal-500/30'
+};
+
+interface ProjectModalProps {
+  /** 模态框唯一标识，与卡片 data-modal-target 对应 */
+  id: string;
+  /** 项目名称 */
+  title: string;
+  /** 项目简介 */
+  description: string;
+  /** 项目详细说明 */
+  detailDescription?: string;
+  /** 技术标签数组 */
+  tags: string[];
+  /** 项目链接地址 */
+  link?: string;
+  /** 在线预览地址 */
+  demoUrl?: string;
+}
+
+const { id, title, description, detailDescription, tags, link, demoUrl } = Astro.props as ProjectModalProps;
+
+/**
+ * 获取标签对应的彩色样式类
+ * 未定义的标签使用默认灰色调。
+ */
+function getTagColorClass(tag: string): string {
+  return TAG_COLORS[tag] || 'bg-bg-primary text-text-secondary border-border';
+}
+---
+
+<!--
+  模态框遮罩层：
+  - fixed inset-0: 覆盖整个视口
+  - z-50: 位于最上层
+  - hidden: 默认隐藏，由 JS 控制显示
+  - data-modal-id: 用于 JS 匹配对应的卡片
+-->
+<div
+  id={`project-modal-${id}`}
+  class="project-modal fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={`modal-title-${id}`}
+>
+  <!-- 模态框内容容器 -->
+  <div class="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-bg-secondary p-6 shadow-2xl sm:p-8">
+    <!-- 关闭按钮 -->
+    <button
+      type="button"
+      class="project-modal-close absolute right-4 top-4 rounded-full p-2 text-text-muted transition-colors hover:bg-bg-primary hover:text-text-primary"
+      aria-label="关闭详情"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- 项目标题 -->
+    <h2 id={`modal-title-${id}`} class="pr-8 text-2xl font-bold text-text-primary sm:text-3xl">
+      {title}
+    </h2>
+
+    <!-- 项目简介 -->
+    <p class="mt-4 text-base leading-relaxed text-text-secondary">
+      {description}
+    </p>
+
+    <!-- 项目详细说明 -->
+    {
+      detailDescription && (
+        <div class="mt-6 rounded-xl border border-border bg-bg-primary p-4 sm:p-5">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-text-muted">项目详情</h3>
+          <p class="mt-2 text-base leading-relaxed text-text-secondary">{detailDescription}</p>
+        </div>
+      )
+    }
+
+    <!-- 技术栈标签 -->
+    <div class="mt-6">
+      <h3 class="text-sm font-semibold uppercase tracking-wider text-text-muted">技术栈</h3>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {
+          tags.map((tag) => (
+            <li class={`rounded-full border px-3 py-1 text-sm font-medium ${getTagColorClass(tag)}`}>
+              {tag}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      {
+        demoUrl && (
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-lg bg-accent px-6 py-2.5 text-base font-semibold text-bg-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover"
+          >
+            在线预览
+          </a>
+        )
+      }
+      {
+        link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-lg border border-border px-6 py-2.5 text-base font-semibold text-text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+          >
+            查看代码
+          </a>
+        )
+      }
+    </div>
+  </div>
+</div>

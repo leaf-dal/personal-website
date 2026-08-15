@@ -1,22 +1,73 @@
 ---
 /**
  * 页脚组件
- * 展示版权信息与社交链接，作为全站统一页脚复用。
+ * 深赭石色大地色块背景，中央放置极简狮子侧脸线稿，
+ * 下方展示 Sternstunden 诗意文字、版权信息与社交链接。
  */
 import { SOCIAL_LINKS, SITE_AUTHOR } from '../constants/site';
 ---
 
-<!-- border-t border-border: 顶部分隔线 -->
-<footer class="border-t border-border bg-bg-primary py-10">
+<!--
+  页脚容器：
+  - bg-[#2C1810]: 深赭石色大地色块
+  - text-[#F5E6D3]: 浅米色文字，确保在深色背景上可读
+-->
+<footer class="bg-[#2C1810] py-12 text-[#F5E6D3]">
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <!-- 狮子侧脸线稿：极简线条风格，面朝右 -->
+    <div class="mx-auto mb-8 flex justify-center">
+      <svg
+        class="h-24 w-auto opacity-90 sm:h-32"
+        viewBox="0 0 200 160"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <!--
+          狮子线稿：使用 currentColor 继承父级浅米色
+          鬃毛用流动弧线表达，头部为简洁侧面轮廓
+        -->
+        <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <!-- 鬃毛：五条流动弧线，从头部后方散开 -->
+          <path d="M45 80c-8-30 18-58 52-62" />
+          <path d="M38 95c-22-18-22-55 8-72" />
+          <path d="M42 115c-28 0-42-28-32-58" />
+          <path d="M62 132c-18 12-42 5-52-22" />
+          <path d="M88 140c-8 18-30 22-48 12" />
+
+          <!-- 头部轮廓：侧面，面朝右 -->
+          <path
+            d="M82 48c22-12 52-8 65 14 10 16 8 38-8 50-18 15-48 16-70 4"
+            stroke-width="2.5"
+          />
+
+          <!-- 突出的口鼻 -->
+          <path d="M140 68l28 6c6 2 8 8 4 14" />
+
+          <!-- 耳朵 -->
+          <path d="M92 46c-6-12 4-22 18-18" />
+
+          <!-- 嘴巴线条 -->
+          <path d="M142 92c8 8 20 6 26-2" />
+        </g>
+
+        <!-- 眼睛：实心小圆点 -->
+        <circle cx="118" cy="58" r="3" fill="currentColor" stroke="none" />
+      </svg>
+    </div>
+
     <!-- 底部诗意文字：使用优雅衬线字体 -->
-    <p class="font-serif-elegant text-center text-lg italic text-text-secondary sm:text-xl">
+    <p
+      class="font-serif-elegant text-center text-lg italic opacity-90 sm:text-xl"
+    >
       最好 Sternstunden 存在与你我之间。
     </p>
 
-    <div class="mt-8 flex flex-col items-center justify-between gap-4 md:flex-row">
+    <div
+      class="mt-10 flex flex-col items-center justify-between gap-4 md:flex-row"
+    >
       <!-- 版权信息：动态获取当前年份 -->
-      <p class="text-sm text-text-muted">
+      <p class="text-sm opacity-70">
         &copy; {new Date().getFullYear()} {SITE_AUTHOR}. 保留所有权利。
       </p>
 
@@ -29,7 +80,7 @@ import { SOCIAL_LINKS, SITE_AUTHOR } from '../constants/site';
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-sm font-medium text-text-secondary transition-colors hover:text-accent"
+                class="text-sm font-medium opacity-85 transition-opacity hover:opacity-100 hover:underline hover:underline-offset-4"
                 aria-label={social.ariaLabel}
               >
                 {social.name}

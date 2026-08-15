@@ -187,12 +187,14 @@ body {
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: -6px;
   left: 0;
   width: 0;
-  height: 1px;
-  background-color: #64748b; /* 蓝灰色，像黑夜中划过的轨迹 */
-  transition: width 0.35s ease;
+  height: 1.5px;
+  background-color: #334155; /* 深蓝灰色，像黑夜中划过的轨迹 */
+  box-shadow: 0 0 6px rgba(51, 65, 85, 0.55); /* 微光，增强锋利感 */
+  transform-origin: left center;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-link:hover::after {

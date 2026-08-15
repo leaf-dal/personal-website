@@ -9,8 +9,8 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // 站点根路径，用于生成最终部署后的绝对链接（如 sitemap、OG 图片等）
-  // 若后续部署到自定义域名，请将此值替换为实际域名
-  site: 'https://your-domain.com',
+  // 当前部署在 Vercel，使用 Vercel 自动分配的域名；若后续绑定自定义域名，请替换为实际域名
+  site: 'https://personal-website-peach-phi-17.vercel.app',
 
   // Vite 层配置：注册 Tailwind CSS 插件
   vite: {

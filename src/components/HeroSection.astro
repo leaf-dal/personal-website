@@ -57,10 +57,11 @@ const skillTags = [
       <div class="pointer-events-none absolute inset-0 z-0 select-none" aria-hidden="true">
         {
           decorWords.map((word, index) => {
+            // 移动端位置更靠内，避免被 overflow-hidden 裁切；sm 以上保持原设计
             const positions = [
-              'top-[5%] left-[2%]',
-              'top-[42%] right-[-4%]',
-              'bottom-[8%] left-[8%]'
+              'top-[5%] left-[4%] sm:left-[2%]',
+              'top-[42%] right-[2%] sm:right-[-4%]',
+              'bottom-[8%] left-[10%] sm:left-[8%]'
             ];
             return (
               <span class={`decor-word absolute ${positions[index]}`} style={`animation-delay: ${index * 0.6}s;`}>
@@ -217,14 +218,14 @@ const skillTags = [
     z-index: 20;
   }
 
-  /* 6 个标签围绕球体分布，移动端适当内收；
+  /* 6 个标签围绕球体分布，移动端更靠内避免裁切；
      使用 CSS 变量 --rotate 保持倾斜角度，动画中同步保留 */
-  .skill-tag-1 { top: 8%; left: 5%; }
-  .skill-tag-2 { top: 35%; left: -2%; }
-  .skill-tag-3 { bottom: 12%; left: 8%; }
-  .skill-tag-4 { top: 12%; right: 5%; }
-  .skill-tag-5 { top: 40%; right: -2%; }
-  .skill-tag-6 { bottom: 10%; right: 8%; }
+  .skill-tag-1 { top: 8%; left: 8%; }
+  .skill-tag-2 { top: 35%; left: 2%; }
+  .skill-tag-3 { bottom: 12%; left: 10%; }
+  .skill-tag-4 { top: 12%; right: 8%; }
+  .skill-tag-5 { top: 40%; right: 2%; }
+  .skill-tag-6 { bottom: 10%; right: 10%; }
 
   @media (min-width: 640px) {
     .skill-tag-1 { top: 6%; left: 10%; }

@@ -1,134 +1,196 @@
 ---
 /**
- * 首页首屏组件
- * 展示个人名称、拼音、一句话简介、详细描述以及两个主要行动按钮。
+ * 首页首屏组件（Sternstunden 主题）
+ * 超大字母水印背景 + 左右分栏布局：
+ * 左侧 45% 为抽象紫粉渐变视觉与散落倾斜卡片，
+ * 右侧 55% 展示姓名、简介与发光的 Sternstunden 主题词。
  */
 import {
   HERO_TITLE,
   HERO_SUBTITLE,
-  HERO_DESCRIPTION,
-  SITE_AUTHOR_PINYIN
+  HERO_DESCRIPTION
 } from '../constants/site';
-import GhostElement from './GhostElement.astro';
-import MagnoliaDecor from './MagnoliaDecor.astro';
+
+// Sternstunden 超大背景字母，横向铺满屏幕
+const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
 ---
 
 <!--
-  min-h-[calc(100vh-4rem)]: 首屏高度 = 视口高度减去固定导航栏高度（4rem = h-16）
-  flex items-center: 内容垂直居中
-  text-center: 文字水平居中
-  relative: 为 Ghost 装饰元素提供定位上下文
+  首屏容器：
+  min-h-screen 占满整个视口高度，
+  overflow-hidden 防止超大字母溢出产生滚动条，
+  flex items-center 让内容垂直居中。
 -->
-<section class="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 sm:px-6 lg:px-8">
-  <!-- 右上角幽灵装饰，为黑白页面增加趣味 -->
-  <GhostElement opacity={0.15} positionClass="top-20 right-6 sm:top-16 sm:right-12" />
+<section class="relative flex min-h-screen items-center overflow-hidden px-4 sm:px-6 lg:px-8">
+  <!-- ===== 超大字母水印背景 ===== -->
+  <div
+    class="pointer-events-none absolute inset-0 z-0 flex items-center justify-between px-2 select-none"
+    aria-hidden="true"
+  >
+    {
+      bgLetters.map((letter) => (
+        <span class="stern-letter flex-1 text-center font-black uppercase leading-none text-transparent">
+          {letter}
+        </span>
+      ))
+    }
+  </div>
 
-  <!-- 左上角玉兰花装饰，紫色水彩风格，轻柔浮动 -->
-  <MagnoliaDecor
-    size="sm"
-    animation="float"
-    class="absolute top-24 left-4 z-10 opacity-70 sm:top-20 sm:left-10"
-  />
+  <!-- ===== 主内容区：左右分栏 ===== -->
+  <div class="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-[45fr_55fr]">
+    <!-- 左侧：抽象视觉 + 散落卡片 -->
+    <div class="relative order-2 flex min-h-[420px] items-center justify-center lg:order-1">
+      <!-- 抽象头像/视觉：紫粉渐变圆形 + 几何线条 -->
+      <div class="abstract-portrait relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 lg:h-96 lg:w-96">
+        <!-- 外层柔和光晕 -->
+        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 via-secondary/20 to-transparent blur-2xl"></div>
+        <!-- 主渐变圆形 -->
+        <div class="relative z-10 flex h-56 w-56 items-center justify-center rounded-full bg-gradient-to-br from-accent via-secondary to-accent/60 shadow-2xl shadow-accent/20 sm:h-64 sm:w-64 lg:h-72 lg:w-72">
+          <!-- 内部装饰线条：模拟声纹 / 代码轨迹 -->
+          <svg
+            class="h-32 w-32 text-white/40 sm:h-36 sm:w-36 lg:h-40 lg:w-40"
+            viewBox="0 0 100 100"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          >
+            <path d="M10 50 Q 25 20, 40 50 T 70 50 T 100 50" />
+            <path d="M10 60 Q 25 30, 40 60 T 70 60 T 100 60" opacity="0.6" />
+            <path d="M10 40 Q 25 10, 40 40 T 70 40 T 100 40" opacity="0.6" />
+            <circle cx="50" cy="50" r="4" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
 
-  <div class="relative z-10 mx-auto max-w-3xl text-center">
-    <!-- 小标题/标签：身份定位 -->
-    <p class="mb-4 text-sm font-medium uppercase tracking-widest text-accent sm:text-base">
-      {HERO_SUBTITLE}
-    </p>
+      <!-- 散落倾斜小卡片 -->
+      <div class="scattered-card absolute top-8 left-4 sm:left-8">
+        <span class="text-xl sm:text-2xl">✨</span>
+        <span class="ml-1 text-xs font-medium text-text-primary">AI 创作</span>
+      </div>
+      <div class="scattered-card absolute bottom-16 left-0 sm:left-4">
+        <span class="text-xl sm:text-2xl">🎬</span>
+        <span class="ml-1 text-xs font-medium text-text-primary">视频剪辑</span>
+      </div>
+      <div class="scattered-card absolute top-20 right-4 sm:right-8">
+        <span class="text-xl sm:text-2xl">🐍</span>
+        <span class="ml-1 text-xs font-medium text-text-primary">Python</span>
+      </div>
+      <div class="scattered-card absolute bottom-8 right-0 sm:right-4">
+        <span class="text-xl sm:text-2xl">📊</span>
+        <span class="ml-1 text-xs font-medium text-text-primary">PPT 设计</span>
+      </div>
+    </div>
 
-    <!-- 主标题：打字机效果容器，文字使用紫粉渐变 -->
-    <h1
-      id="typewriter-title"
-      class="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl"
-      data-text={HERO_TITLE}
-    >
-      <span class="typewriter-text gradient-text"></span>
-      <span class="typewriter-cursor" aria-hidden="true">|</span>
-    </h1>
+    <!-- 右侧：文字内容 -->
+    <div class="order-1 text-center lg:order-2 lg:text-left">
+      <!-- 身份标签 -->
+      <p class="mb-4 text-sm font-light uppercase tracking-[0.3em] text-text-muted sm:text-base">
+        {HERO_SUBTITLE}
+      </p>
 
-    <!-- 副标题：斜体小字，点明 Sternstunden 主题 -->
-    <p class="mt-4 text-base italic text-text-secondary sm:text-lg">
-      在代码和创意之间，寻找我的 Sternstunden。
-    </p>
+      <!-- 主标题：姓名 -->
+      <h1 class="text-5xl font-bold tracking-tight text-text-primary sm:text-6xl lg:text-7xl">
+        王佳叶
+      </h1>
 
-    <!-- 拼音标注：全大写 + 加宽字间距，增强设计感 -->
-    <p class="mt-3 text-sm font-medium uppercase tracking-[0.5em] text-text-muted sm:text-base">
-      {SITE_AUTHOR_PINYIN}
-    </p>
+      <!-- Sternstunden：发光效果主题词 -->
+      <p class="stern-glow mt-3 font-serif text-3xl italic tracking-wide sm:text-4xl lg:text-5xl">
+        Sternstunden
+      </p>
 
-    <!-- 描述文字 -->
-    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-text-secondary sm:text-xl">
-      {HERO_DESCRIPTION}
-    </p>
+      <!-- 副标题：点明主题 -->
+      <p class="mt-4 text-base italic text-text-secondary sm:text-lg">
+        在代码和创意之间，寻找我的 Sternstunden。
+      </p>
 
-    <!-- 行动按钮组 -->
-    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <!-- 主按钮：查看项目，使用紫粉渐变 -->
-      <a
-        href="/projects"
-        class="btn-primary inline-flex items-center justify-center rounded-lg px-8 py-3 text-base font-semibold"
-      >
-        查看项目
-      </a>
+      <!-- 个人简介 -->
+      <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-text-secondary lg:mx-0 lg:max-w-lg">
+        {HERO_DESCRIPTION}
+      </p>
 
-      <!-- 次按钮：了解更多 -->
-      <a
-        href="/about"
-        class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-lg hover:shadow-accent/5"
-      >
-        了解更多
-      </a>
+      <!-- 行动按钮 -->
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
+        <a
+          href="/projects"
+          class="btn-primary inline-flex items-center justify-center rounded-lg px-8 py-3 text-base font-semibold"
+        >
+          查看项目
+        </a>
+        <a
+          href="/about"
+          class="inline-flex items-center justify-center rounded-lg border border-border px-8 py-3 text-base font-semibold text-text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-lg hover:shadow-accent/5"
+        >
+          了解更多
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* 打字机光标闪烁动画 */
-  .typewriter-cursor {
-    display: inline-block;
-    width: 0.08em;
-    color: var(--color-accent);
-    animation: blink 1s step-end infinite;
+  /* ===== 超大字母水印 ===== */
+  .stern-letter {
+    font-size: clamp(3rem, 14vw, 12rem);
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: 0.04;
   }
 
-  @keyframes blink {
+  /* ===== Sternstunden 发光文字 ===== */
+  .stern-glow {
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow:
+      0 0 20px rgba(124, 58, 237, 0.25),
+      0 0 40px rgba(236, 72, 153, 0.15);
+  }
+
+  /* ===== 抽象视觉微浮动动画 ===== */
+  .abstract-portrait {
+    animation: portrait-float 6s ease-in-out infinite;
+  }
+
+  @keyframes portrait-float {
     0%,
     100% {
-      opacity: 1;
+      transform: translateY(0);
     }
     50% {
-      opacity: 0;
+      transform: translateY(-12px);
     }
+  }
+
+  /* ===== 散落倾斜卡片 ===== */
+  .scattered-card {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(124, 58, 237, 0.12);
+    box-shadow: 0 8px 24px -12px rgba(124, 58, 237, 0.2);
+    transition: transform 0.3s ease;
+  }
+
+  .scattered-card:nth-child(1) {
+    transform: rotate(-6deg);
+  }
+  .scattered-card:nth-child(2) {
+    transform: rotate(5deg);
+  }
+  .scattered-card:nth-child(3) {
+    transform: rotate(7deg);
+  }
+  .scattered-card:nth-child(4) {
+    transform: rotate(-4deg);
+  }
+
+  .scattered-card:hover {
+    transform: rotate(0deg) scale(1.05);
   }
 </style>
-
-<script>
-  /**
-   * 首页标题打字机效果
-   * 页面加载后逐字显示标题，营造科技感。
-   */
-  const titleEl = document.getElementById('typewriter-title');
-  const textEl = titleEl?.querySelector('.typewriter-text');
-  const fullText = titleEl?.getAttribute('data-text') || '';
-
-  /** 当前已显示的字符索引 */
-  let charIndex = 0;
-
-  /**
-   * 逐字追加到显示区域
-   * 每个字符间隔 120ms，兼顾节奏感与可读性。
-   */
-  function typeNextChar(): void {
-    if (!textEl || charIndex >= fullText.length) return;
-
-    textEl.textContent += fullText.charAt(charIndex);
-    charIndex += 1;
-
-    if (charIndex < fullText.length) {
-      setTimeout(typeNextChar, 120);
-    }
-  }
-
-  // 延迟 300ms 开始打字，让页面其他元素先完成渲染
-  setTimeout(typeNextChar, 300);
-</script>

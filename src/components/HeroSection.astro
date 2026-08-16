@@ -2,7 +2,7 @@
 /**
  * 首页首屏组件（Sternstunden 主题）
  * 超大字母水印背景 + 左右分栏布局：
- * 左侧 45% 为抽象紫粉渐变视觉与散落倾斜卡片，
+ * 左侧 45% 为抽象紫粉渐变视觉与环绕技术栈标签，
  * 右侧 55% 展示姓名、简介与发光的 Sternstunden 主题词。
  */
 import {
@@ -13,6 +13,16 @@ import {
 
 // Sternstunden 超大背景字母，横向铺满屏幕
 const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
+
+// 首页左侧环绕的技术栈标签：选取核心技能，均匀分布在球体周围
+const skillTags = [
+  { name: 'Python', icon: '🐍' },
+  { name: 'AI 工具', icon: '✨' },
+  { name: 'Astro', icon: '🚀' },
+  { name: 'React', icon: '⚛️' },
+  { name: 'Tailwind', icon: '🎨' },
+  { name: 'PPT 设计', icon: '📊' }
+];
 ---
 
 <!--
@@ -38,17 +48,17 @@ const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
 
   <!-- ===== 主内容区：左右分栏 ===== -->
   <div class="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-[45fr_55fr]">
-    <!-- 左侧：抽象视觉 + 散落卡片 -->
-    <div class="relative order-2 flex min-h-[420px] items-center justify-center lg:order-1">
-      <!-- 抽象头像/视觉：紫粉渐变圆形 + 几何线条 -->
-      <div class="abstract-portrait relative flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80 lg:h-96 lg:w-96">
+    <!-- 左侧：抽象视觉 + 环绕技术栈标签 -->
+    <div class="relative order-2 flex min-h-[480px] items-center justify-center lg:order-1">
+      <!-- 抽象头像/视觉：紫粉渐变圆形 + 几何线条（整体放大 20%-30%） -->
+      <div class="abstract-portrait relative flex h-80 w-80 items-center justify-center sm:h-96 sm:w-96 lg:h-[28rem] lg:w-[28rem]">
         <!-- 外层柔和光晕 -->
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-accent/20 via-secondary/20 to-transparent blur-2xl"></div>
         <!-- 主渐变圆形 -->
-        <div class="relative z-10 flex h-56 w-56 items-center justify-center rounded-full bg-gradient-to-br from-accent via-secondary to-accent/60 shadow-2xl shadow-accent/20 sm:h-64 sm:w-64 lg:h-72 lg:w-72">
+        <div class="relative z-10 flex h-64 w-64 items-center justify-center rounded-full bg-gradient-to-br from-accent via-secondary to-accent/60 shadow-2xl shadow-accent/20 sm:h-80 sm:w-80 lg:h-[22rem] lg:w-[22rem]">
           <!-- 内部装饰线条：模拟声纹 / 代码轨迹 -->
           <svg
-            class="h-32 w-32 text-white/40 sm:h-36 sm:w-36 lg:h-40 lg:w-40"
+            class="h-36 w-36 text-white/40 sm:h-44 sm:w-44 lg:h-52 lg:w-52"
             viewBox="0 0 100 100"
             fill="none"
             stroke="currentColor"
@@ -63,23 +73,21 @@ const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
         </div>
       </div>
 
-      <!-- 散落倾斜小卡片 -->
-      <div class="scattered-card absolute top-8 left-4 sm:left-8">
-        <span class="text-xl sm:text-2xl">✨</span>
-        <span class="ml-1 text-xs font-medium text-text-primary">AI 创作</span>
-      </div>
-      <div class="scattered-card absolute bottom-16 left-0 sm:left-4">
-        <span class="text-xl sm:text-2xl">🎬</span>
-        <span class="ml-1 text-xs font-medium text-text-primary">视频剪辑</span>
-      </div>
-      <div class="scattered-card absolute top-20 right-4 sm:right-8">
-        <span class="text-xl sm:text-2xl">🐍</span>
-        <span class="ml-1 text-xs font-medium text-text-primary">Python</span>
-      </div>
-      <div class="scattered-card absolute bottom-8 right-0 sm:right-4">
-        <span class="text-xl sm:text-2xl">📊</span>
-        <span class="ml-1 text-xs font-medium text-text-primary">PPT 设计</span>
-      </div>
+      <!-- 环绕技术栈标签：带轻微上下浮动动画，悬停放大 -->
+      {
+        skillTags.map((tag, index) => {
+          const rotations = ['-5deg', '4deg', '-3deg', '5deg', '-4deg', '3deg'];
+          return (
+            <div
+              class={`skill-tag skill-tag-${index + 1}`}
+              style={`--rotate: ${rotations[index]}; animation-delay: ${index * 0.4}s;`}
+            >
+              <span class="text-lg sm:text-xl">{tag.icon}</span>
+              <span class="ml-1 text-xs font-medium whitespace-nowrap text-text-primary sm:text-sm">{tag.name}</span>
+            </div>
+          );
+        })
+      }
     </div>
 
     <!-- 右侧：文字内容 -->
@@ -164,33 +172,53 @@ const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
     }
   }
 
-  /* ===== 散落倾斜卡片 ===== */
-  .scattered-card {
+  /* ===== 环绕技术栈标签 ===== */
+  .skill-tag {
+    position: absolute;
     display: flex;
     align-items: center;
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 0.9rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(124, 58, 237, 0.12);
     box-shadow: 0 8px 24px -12px rgba(124, 58, 237, 0.2);
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: tag-float 3s ease-in-out infinite;
   }
 
-  .scattered-card:nth-child(1) {
-    transform: rotate(-6deg);
-  }
-  .scattered-card:nth-child(2) {
-    transform: rotate(5deg);
-  }
-  .scattered-card:nth-child(3) {
-    transform: rotate(7deg);
-  }
-  .scattered-card:nth-child(4) {
-    transform: rotate(-4deg);
+  .skill-tag:hover {
+    transform: rotate(var(--rotate, 0deg)) scale(1.15);
+    box-shadow: 0 12px 32px -10px rgba(124, 58, 237, 0.35);
+    z-index: 20;
   }
 
-  .scattered-card:hover {
-    transform: rotate(0deg) scale(1.05);
+  /* 6 个标签围绕球体分布，移动端适当内收；
+     使用 CSS 变量 --rotate 保持倾斜角度，动画中同步保留 */
+  .skill-tag-1 { top: 8%; left: 5%; }
+  .skill-tag-2 { top: 35%; left: -2%; }
+  .skill-tag-3 { bottom: 12%; left: 8%; }
+  .skill-tag-4 { top: 12%; right: 5%; }
+  .skill-tag-5 { top: 40%; right: -2%; }
+  .skill-tag-6 { bottom: 10%; right: 8%; }
+
+  @media (min-width: 640px) {
+    .skill-tag-1 { top: 6%; left: 10%; }
+    .skill-tag-2 { top: 34%; left: 4%; }
+    .skill-tag-3 { bottom: 10%; left: 12%; }
+    .skill-tag-4 { top: 10%; right: 10%; }
+    .skill-tag-5 { top: 38%; right: 4%; }
+    .skill-tag-6 { bottom: 8%; right: 12%; }
+  }
+
+  /* 标签轻微上下浮动动画：保留倾斜角度 */
+  @keyframes tag-float {
+    0%,
+    100% {
+      transform: rotate(var(--rotate, 0deg)) translateY(0);
+    }
+    50% {
+      transform: rotate(var(--rotate, 0deg)) translateY(-8px);
+    }
   }
 </style>

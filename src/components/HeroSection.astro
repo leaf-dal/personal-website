@@ -14,6 +14,9 @@ import {
 // Sternstunden 超大背景字母，横向铺满屏幕
 const bgLetters = ['S', 'T', 'E', 'R', 'N', 'S', 'T', 'U', 'N', 'D', 'E', 'N'];
 
+// 左侧背景装饰性大写英文单词：作为底纹，填补空白并强化主题
+const decorWords = ['DEVELOPER', 'CREATIVE', 'CODE'];
+
 // 首页左侧环绕的技术栈标签：选取核心技能，均匀分布在球体周围
 const skillTags = [
   { name: 'Python', icon: '🐍' },
@@ -50,6 +53,24 @@ const skillTags = [
   <div class="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-[45fr_55fr]">
     <!-- 左侧：抽象视觉 + 环绕技术栈标签 -->
     <div class="relative order-2 flex min-h-[480px] items-center justify-center lg:order-1">
+      <!-- 左侧背景装饰词：超大、极低透明度，作为底纹填补空白 -->
+      <div class="pointer-events-none absolute inset-0 z-0 select-none" aria-hidden="true">
+        {
+          decorWords.map((word, index) => {
+            const positions = [
+              'top-[5%] left-[2%]',
+              'top-[42%] right-[-4%]',
+              'bottom-[8%] left-[8%]'
+            ];
+            return (
+              <span class={`decor-word absolute ${positions[index]}`} style={`animation-delay: ${index * 0.6}s;`}>
+                {word}
+              </span>
+            );
+          })
+        }
+      </div>
+
       <!-- 抽象头像/视觉：紫粉渐变圆形 + 几何线条（整体放大 20%-30%） -->
       <div class="abstract-portrait relative flex h-80 w-80 items-center justify-center sm:h-96 sm:w-96 lg:h-[28rem] lg:w-[28rem]">
         <!-- 外层柔和光晕 -->
@@ -221,6 +242,29 @@ const skillTags = [
     }
     50% {
       transform: rotate(var(--rotate, 0deg)) translateY(-10px) scale(var(--tag-scale, 1));
+    }
+  }
+
+  /* ===== 左侧背景装饰词：超大、极低透明度，营造底纹质感 ===== */
+  .decor-word {
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: rgba(124, 58, 237, 0.05);
+    animation: decor-pulse 5s ease-in-out infinite;
+  }
+
+  @keyframes decor-pulse {
+    0%,
+    100% {
+      opacity: 0.04;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 0.07;
+      transform: translateY(-6px);
     }
   }
 </style>

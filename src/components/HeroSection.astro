@@ -183,12 +183,14 @@ const skillTags = [
     backdrop-filter: blur(8px);
     border: 1px solid rgba(124, 58, 237, 0.12);
     box-shadow: 0 8px 24px -12px rgba(124, 58, 237, 0.2);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    /* 默认缩放比例为 1，悬停时通过 CSS 变量放大，避免覆盖浮动动画 */
+    --tag-scale: 1;
+    transition: box-shadow 0.25s ease;
     animation: tag-float 3s ease-in-out infinite;
   }
 
   .skill-tag:hover {
-    transform: rotate(var(--rotate, 0deg)) scale(1.15);
+    --tag-scale: 1.15;
     box-shadow: 0 12px 32px -10px rgba(124, 58, 237, 0.35);
     z-index: 20;
   }
@@ -211,14 +213,14 @@ const skillTags = [
     .skill-tag-6 { bottom: 8%; right: 12%; }
   }
 
-  /* 标签轻微上下浮动动画：保留倾斜角度 */
+  /* 标签轻微上下浮动动画：保留倾斜角度，同时响应悬停缩放变量 */
   @keyframes tag-float {
     0%,
     100% {
-      transform: rotate(var(--rotate, 0deg)) translateY(0);
+      transform: rotate(var(--rotate, 0deg)) translateY(0) scale(var(--tag-scale, 1));
     }
     50% {
-      transform: rotate(var(--rotate, 0deg)) translateY(-8px);
+      transform: rotate(var(--rotate, 0deg)) translateY(-10px) scale(var(--tag-scale, 1));
     }
   }
 </style>

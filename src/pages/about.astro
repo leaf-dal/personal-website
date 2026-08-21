@@ -86,13 +86,28 @@ const skillTags = [
         </ul>
       </div>
 
-      <!-- 联系方式 -->
+      <!-- 联系方式：融合微信二维码与主动交流邀请 -->
       <div class="mt-16 text-center">
         <h2 class="text-2xl font-bold text-text-primary sm:text-3xl">联系我</h2>
         <p class="mt-4 text-text-secondary">
           无论是资料获取、技能交流还是项目合作，都欢迎联系。
         </p>
-        <ul class="mt-6 flex flex-wrap items-center justify-center gap-6">
+
+        <!-- 微信二维码：热情的主动交往邀请 -->
+        <div class="mx-auto mt-8 max-w-sm rounded-2xl border border-border bg-bg-secondary p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+          <img
+            src="/images/wechat-qr.jpg"
+            alt="我的微信二维码"
+            class="mx-auto h-48 w-48 rounded-xl object-cover"
+            loading="lazy"
+          />
+          <p class="mt-4 text-base leading-relaxed text-text-secondary">
+            如果你对我的学习笔记、项目实践感兴趣，或者想一起交流成长，欢迎扫码加我微信！<br />
+            <span class="text-accent">我很期待认识志同道合的朋友，一起碰撞想法、互相学习。</span>
+          </p>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap items-center justify-center gap-6">
           {
             SOCIAL_LINKS.map((social) => (
               <li>

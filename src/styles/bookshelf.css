@@ -1,0 +1,507 @@
+/* ============================================================
+ * 阅读 · 全局样式
+ * 设计风格：现代极简 / 柔和暖纸色（参考 Notion & Apple Books）
+ * 布局策略：水平轮播（Carousel）—— 一排书自动缓慢向左滚动；
+ *           桌面端悬停 3D 翻书，移动端单列展示 + 左右滑动翻页。
+ * ============================================================ */
+
+/* ---------- 设计变量 ---------- */
+.bookshelf-wrap {
+  /* 基础色板 */
+  --bg: #f5f2ec;             /* 页面暖纸底色 */
+  --surface: #ffffff;        /* 卡片 / 弹窗表面 */
+  --text: #2e2b26;           /* 主文字（暖黑） */
+  --text-secondary: #8d867c; /* 次要文字 */
+  --border: #eae4da;         /* 分隔线 / 描边 */
+  --accent: #b07d4f;         /* 主强调色（陶土棕） */
+  --accent-soft: #f0e4d6;    /* 强调色浅底（聚焦光晕） */
+  --danger: #b0523f;         /* 危险操作色 */
+
+  /* 阴影与圆角 */
+  --shadow: 0 2px 6px rgba(46, 43, 38, 0.06), 0 10px 28px rgba(46, 43, 38, 0.10);
+  --shadow-lg: 0 8px 24px rgba(46, 43, 38, 0.14), 0 22px 48px rgba(46, 43, 38, 0.18);
+
+  /* 轮播卡片宽度：桌面固定 230px，移动端占屏宽 74%（单列展示） */
+  --card-w: 230px;
+
+  /* 阅读状态配色（浅底 + 深字，柔和低对比） */
+  --reading-bg: #e2efe8;  --reading-fg: #3f7a63;
+  --read-bg: #eae8f5;     --read-fg: #5d58a0;
+  --wishlist-bg: #f6ead9; --wishlist-fg: #b07d4f;
+}
+
+@media (max-width: 640px) {
+  .bookshelf-wrap { --card-w: 74vw; }
+}
+
+/* ---------- 基础重置 ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden; /* 防止轮播拖出横向滚动条 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 模态框打开时锁定背景滚动 */
+body.no-scroll { overflow: hidden; }
+
+/* 统一隐藏规则：hidden 属性必须真正生效（避免被其他样式覆盖） */
+[hidden] { display: none !important; }
+
+button { font-family: inherit; }
+
+/* ============================================================
+ * 顶部标题区（吸顶）
+ * ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 16px 14px;
+  background: rgba(245, 242, 236, 0.86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* 副标题：标题下方的小字 */
+.topbar-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+ * 水平轮播容器
+ * ============================================================ */
+.main {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4px 0 120px; /* 底部留白，避免被悬浮按钮遮挡 */
+}
+
+.carousel {
+  width: 100%;
+  overflow: hidden;
+  user-select: none;         /* 拖拽时避免选中文字 */
+  touch-action: pan-y;       /* 竖向滚动交给浏览器，横向由 JS 接管 */
+  margin-top: 8px;
+}
+
+/* 轨道：一排卡片，左右内边距让首尾卡也能居中展示 */
+.carousel-track {
+  display: flex;
+  gap: 28px;
+  padding: 20px 0 8px;
+  padding-inline: max(16px, calc(50% - var(--card-w) / 2));
+  will-change: transform;
+}
+
+/* ============================================================
+ * 书籍卡片：3D 翻转书
+ * ============================================================ */
+.book-card {
+  width: var(--card-w);
+  flex: 0 0 auto;
+  cursor: pointer;
+  perspective: 1400px; /* 透视距离，增强 3D 立体感 */
+}
+
+/* 翻转内层：正面/背面同轴旋转 */
+.book-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 7; /* 接近书封比例 */
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+/* 触屏：轻点切换（JS 加类） */
+.book-inner.is-flipped { transform: rotateY(180deg); }
+
+/* 桌面：鼠标悬停即翻转 */
+@media (hover: hover) {
+  .book-card:hover .book-inner { transform: rotateY(180deg); }
+}
+
+/* 正面与背面共用布局基座 */
+.book-front,
+.book-back {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 6px 14px 14px 6px; /* 右边圆角更大，模拟书脊侧 */
+  box-shadow: var(--shadow-lg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 背面朝后旋转 180°，翻面时可见 */
+.book-back { transform: rotateY(180deg); }
+
+/* ---------- 正面：立体书封面 ---------- */
+.book-front { display: flex; flex-direction: column; }
+
+/* 封面底色：书名哈希决定的柔和渐变 */
+.front-bg {
+  position: absolute;
+  inset: 0;
+}
+
+/* 用户提供的封面图：加载成功时盖在渐变之上 */
+.front-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 书脊阴影：左侧窄条渐变，营造厚度感 */
+.book-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 13%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+
+/* 封面装饰框线（内嵌细线，像印刷的封面版式） */
+.book-front::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px 9px 9px 3px;
+  pointer-events: none;
+}
+
+/* ---------- 背面：书中金句 + 管理操作 ---------- */
+.book-back {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  background: #fdfbf7;
+  color: var(--text);
+}
+
+.back-label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+}
+
+.back-intro {
+  flex: 1;
+  font-size: 13.5px;
+  line-height: 1.9;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;         /* 简介最多 6 行，超出省略 */
+  -webkit-box-orient: vertical;
+}
+
+/* 背面底部：状态切换 + 删除 */
+.back-controls { margin-top: 12px; }
+
+.back-status {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.back-status-btn {
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.back-status-btn.is-active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+  font-weight: 600;
+}
+
+.back-delete {
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 0;
+  font-size: 12px;
+  color: var(--danger);
+  background: transparent;
+  border: 1px solid rgba(176, 82, 63, 0.35);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ============================================================
+ * 页码指示点
+ * ============================================================ */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  background: #d8d1c4;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.dot.is-active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+/* ============================================================
+ * 空状态
+ * ============================================================ */
+.empty-state {
+  padding: 72px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  color: #cfc8bd;
+}
+
+.empty-title {
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.empty-tip { font-size: 13px; }
+
+/* ============================================================
+ * 悬浮添加按钮（FAB）
+ * ============================================================ */
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(84px + env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  font-size: 26px;
+  line-height: 1;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(176, 125, 79, 0.45);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.fab:active { transform: scale(0.92); }
+
+/* ============================================================
+ * 模态框：手机上为底部抽屉，宽屏居中
+ * ============================================================ */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: flex-end;               /* 移动端：底部抽屉 */
+  justify-content: center;
+  background: rgba(30, 28, 24, 0.45);
+  animation: mask-in 0.2s ease;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;        /* 防止滚动穿透到背景 */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;        /* 移动端：顶部圆角 */
+  animation: sheet-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@media (min-width: 640px) {
+  .modal-mask { align-items: center; padding: 24px; }
+  .modal { border-radius: 20px; }
+}
+
+/* 关闭按钮（弹窗右上角） */
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* ---------- 动画 ---------- */
+@keyframes mask-in { from { opacity: 0; } }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+
+/* ============================================================
+ * 添加表单
+ * ============================================================ */
+.modal-title { margin-bottom: 18px; font-size: 19px; font-weight: 700; }
+
+.form-field { margin-bottom: 14px; }
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 必填星号 */
+.form-label em { font-style: normal; color: var(--danger); }
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+textarea.form-input {
+  min-height: 72px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+/* 状态选择按钮组：三选一 */
+.status-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.status-option {
+  padding: 9px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.status-option.is-active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+  font-weight: 600;
+}
+
+/* 表单底部按钮组 */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.bs-btn {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 15px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+}
+.bs-btn:active { transform: scale(0.97); }
+
+.bs-btn-primary { color: #fff; background: var(--accent); font-weight: 600; }
+.bs-btn-ghost   { color: var(--text); background: var(--bg); }
+.bs-btn-danger  { color: #fff; background: var(--danger); font-weight: 600; }
+
+/* 删除确认弹窗 */
+.confirm-modal { max-width: 340px; padding: 24px; }
+.confirm-text { margin-bottom: 18px; font-size: 15px; line-height: 1.7; }
+
+/* ============================================================
+ * 轻提示 Toast
+ * ============================================================ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  z-index: 220;
+  max-width: 80vw;
+  padding: 9px 18px;
+  font-size: 13px;
+  text-align: center;
+  color: #fff;
+  background: rgba(30, 28, 24, 0.92);
+  border-radius: 999px;
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.toast.is-show { opacity: 1; transform: translate(-50%, 0); }
+
+/* 用户偏好减少动态效果时，关闭过渡动画 */
+@media (prefers-reduced-motion: reduce) {
+  .modal-mask, .modal, .toast { animation: none; transition: none; }
+}

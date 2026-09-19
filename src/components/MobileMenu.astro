@@ -1,0 +1,60 @@
+---
+/**
+ * 移动端抽屉式菜单组件
+ * 默认通过 CSS translate-x-full 隐藏在屏幕右侧，
+ * 由 Header 组件中的脚本控制显示与隐藏。
+ */
+import { NAVIGATION_LINKS } from '../constants/site';
+---
+
+<!--
+  fixed inset-y-0 right-0: 固定在右侧，占满上下高度
+  w-64: 菜单宽度 16rem
+  translate-x-full: 默认向右侧移出屏幕
+  transition-transform: 显示/隐藏时有平滑动画
+  md:hidden: 桌面端隐藏
+-->
+<aside
+  id="mobile-menu"
+  class="fixed inset-y-0 right-0 z-50 w-64 bg-bg-secondary shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out md:hidden"
+  aria-label="移动端导航"
+>
+  <div class="flex h-full flex-col p-6">
+    <!-- 关闭按钮 -->
+    <div class="flex justify-end">
+      <button
+        type="button"
+        id="mobile-menu-close"
+        class="p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-primary transition-colors"
+        aria-label="关闭菜单"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- 移动端导航链接列表 -->
+    <ul class="mt-8 flex flex-col gap-6">
+      {
+        NAVIGATION_LINKS.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="block text-lg font-medium text-text-primary transition-colors hover:text-accent"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</aside>

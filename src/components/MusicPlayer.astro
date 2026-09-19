@@ -1,0 +1,296 @@
+---
+/**
+ * 背景音乐播放组件
+ * 全站共用的悬浮音乐控制按钮（固定在右下角）：
+ * - 进入页面自动尝试播放背景音乐（受浏览器自动播放策略限制，若被拦截，
+ *   会在用户首次点击页面任意位置后自动开始播放）
+ * - 点击按钮即可切换 播放 / 暂停
+ * - 使用 localStorage 记忆「是否播放」与「播放进度」，切换页面后自动续播
+ * - 播放中显示跳动的均衡器动画，暂停时显示音符图标
+ */
+// 背景音乐文件路径（存放在 public 目录下）
+// 使用 import.meta.env.BASE_URL 自动拼接站点根前缀（如 GitHub Pages 的子路径 /personal-website/），
+// 确保部署到子路径时音频链接不会 404
+const MUSIC_SRC = `${import.meta.env.BASE_URL}music/bgm.mp3`;
+
+// localStorage 存储键名：分别记录「播放状态」与「播放进度」
+const STORAGE_PLAYING = 'bgm-playing';
+const STORAGE_TIME = 'bgm-time';
+---
+
+<!--
+  音频元素：隐藏、循环播放、自动预加载
+  说明：不加 controls，完全由下方悬浮按钮控制
+-->
+<audio id="bgm-audio" src={MUSIC_SRC} loop preload="auto"></audio>
+
+<!--
+  悬浮控制按钮：
+  - 圆形紫色渐变，与网站强调色一致
+  - 播放中时按钮内显示跳动的均衡器动画，暂停时显示音符图标
+-->
+<button id="bgm-toggle" type="button" aria-label="切换背景音乐" aria-pressed="false" title="播放背景音乐">
+  <!-- 音符图标（暂停/未播放状态显示） -->
+  <svg
+    class="bgm-note"
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M9 18V5l12-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="18" cy="16" r="3" />
+  </svg>
+
+  <!-- 均衡器动画条（播放中显示）：三条小竖条错峰跳动 -->
+  <span class="bgm-eq" aria-hidden="true">
+    <span class="bgm-eq-bar"></span>
+    <span class="bgm-eq-bar"></span>
+    <span class="bgm-eq-bar"></span>
+  </span>
+</button>
+
+<style>
+  /* ------------------------------------------------------------------
+     悬浮按钮本体：固定在右下角，紫色渐变圆形，带柔和阴影
+     ------------------------------------------------------------------ */
+  #bgm-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* 悬停时轻微上浮放大，呼应全站按钮风格 */
+  #bgm-toggle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.45);
+  }
+
+  /* 点击时的按压反馈 */
+  #bgm-toggle:active {
+    transform: scale(0.95);
+  }
+
+  /* ------------------------------------------------------------
+     音符图标：暂停/未播放时显示；播放中时隐藏
+     ------------------------------------------------------------ */
+  .bgm-note {
+    display: block;
+  }
+
+  /* ------------------------------------------------------------
+     均衡器：三条竖条，播放中才显示并跳动
+     ------------------------------------------------------------ */
+  .bgm-eq {
+    display: none;
+    align-items: flex-end;
+    gap: 3px;
+    height: 16px;
+  }
+
+  .bgm-eq-bar {
+    width: 3px;
+    height: 5px;
+    border-radius: 2px;
+    background: #ffffff;
+    transition: height 0.2s ease;
+  }
+
+  /* 播放状态：隐藏音符、显示均衡器，并让三条条错峰跳动 */
+  #bgm-toggle.is-playing .bgm-note {
+    display: none;
+  }
+
+  #bgm-toggle.is-playing .bgm-eq {
+    display: flex;
+  }
+
+  /* 均衡器跳动动画：高度 5px → 16px 循环 */
+  @keyframes bgm-bounce {
+    0%,
+    100% {
+      height: 5px;
+    }
+    50% {
+      height: 16px;
+    }
+  }
+
+  #bgm-toggle.is-playing .bgm-eq-bar {
+    animation: bgm-bounce 1s ease-in-out infinite;
+  }
+
+  /* 三条竖条错峰延迟，形成波浪感 */
+  #bgm-toggle.is-playing .bgm-eq-bar:nth-child(1) {
+    animation-delay: 0s;
+  }
+  #bgm-toggle.is-playing .bgm-eq-bar:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  #bgm-toggle.is-playing .bgm-eq-bar:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+</style>
+
+<script>
+  /**
+   * 背景音乐交互逻辑
+   * 功能：播放/暂停切换、状态记忆、跨页面续播、绕过浏览器自动播放限制
+   */
+
+  // 获取音频元素与悬浮按钮
+  const audio = document.getElementById('bgm-audio') as HTMLAudioElement | null;
+  const toggleBtn = document.getElementById('bgm-toggle') as HTMLButtonElement | null;
+
+  // 若元素缺失则直接退出（防御性判断）
+  if (!audio || !toggleBtn) {
+    throw new Error('bgm 元素未找到');
+  }
+
+  // localStorage 存储键名（与组件前端常量保持一致）
+  const STORAGE_PLAYING = 'bgm-playing';
+  const STORAGE_TIME = 'bgm-time';
+
+  /** 当前是否处于播放中 */
+  let isPlaying = false;
+
+  // ------------------------------------------------------------------
+  // 恢复上次播放进度：切换页面后音乐从上次位置继续
+  // ------------------------------------------------------------------
+  const savedTime = Number.parseFloat(localStorage.getItem(STORAGE_TIME) ?? '0') || 0;
+  if (savedTime > 0 && Number.isFinite(savedTime)) {
+    audio.currentTime = savedTime;
+  }
+
+  // 音量设为 0.3，柔和不刺耳
+  audio.volume = 0.3;
+
+  // ------------------------------------------------------------------
+  // 工具函数：保存播放状态与进度到 localStorage
+  // ------------------------------------------------------------------
+  function saveState(): void {
+    try {
+      localStorage.setItem(STORAGE_TIME, String(audio.currentTime));
+      localStorage.setItem(STORAGE_PLAYING, isPlaying ? '1' : '0');
+    } catch {
+      /* 隐私模式等场景下 localStorage 不可用，静默忽略 */
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // 工具函数：根据播放状态刷新按钮 UI（图标切换 + aria 无障碍属性）
+  // ------------------------------------------------------------------
+  function updateUI(): void {
+    toggleBtn.classList.toggle('is-playing', isPlaying);
+    toggleBtn.setAttribute('aria-pressed', String(isPlaying));
+    toggleBtn.title = isPlaying ? '暂停背景音乐' : '播放背景音乐';
+  }
+
+  // ------------------------------------------------------------------
+  // 工具函数：尝试播放（处理自动播放被拦截的失败情况）
+  // ------------------------------------------------------------------
+  function play(): void {
+    audio
+      .play()
+      .then(() => {
+        isPlaying = true;
+        updateUI();
+        saveState();
+      })
+      .catch(() => {
+        // 浏览器拦截了自动播放，保持暂停，等待用户首次交互后再播放
+        isPlaying = false;
+        updateUI();
+      });
+  }
+
+  // ------------------------------------------------------------------
+  // 点击按钮：切换 播放/暂停
+  // ------------------------------------------------------------------
+  toggleBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      play();
+    } else {
+      audio.pause();
+      isPlaying = false;
+      updateUI();
+      saveState();
+    }
+  });
+
+  // ------------------------------------------------------------------
+  // 音频状态监听：被其它方式暂停时同步 UI
+  // ------------------------------------------------------------------
+  audio.addEventListener('pause', () => {
+    // 排除播放结束导致的暂停（loop 模式下不会发生，仅作防御）
+    if (!audio.ended) {
+      isPlaying = false;
+      updateUI();
+    }
+  });
+
+  // ------------------------------------------------------------------
+  // 进度自动保存：播放过程中节流写入（每 2 秒一次）
+  // ------------------------------------------------------------------
+  let lastSaveAt = 0;
+  audio.addEventListener('timeupdate', () => {
+    const now = Date.now();
+    if (now - lastSaveAt > 2000) {
+      lastSaveAt = now;
+      saveState();
+    }
+  });
+
+  // 页面隐藏（跳转/关闭）前保存一次，确保进度不丢失
+  window.addEventListener('pagehide', saveState);
+
+  // ------------------------------------------------------------------
+  // 首次访问默认开启音乐；老访客则沿用上次的设置
+  // ------------------------------------------------------------------
+  const savedPlaying = localStorage.getItem(STORAGE_PLAYING);
+  const shouldPlay = savedPlaying === null ? true : savedPlaying === '1';
+
+  if (shouldPlay) {
+    // 先尝试直接自动播放；若被浏览器拦截，等待用户首次交互后自动开始
+    play();
+  }
+
+  // ------------------------------------------------------------------
+  // 绕过浏览器自动播放限制：
+  // 若用户上次处于播放状态但被拦截，则在用户首次点击/触摸/按键后启动音乐
+  // ------------------------------------------------------------------
+  function tryResumeOnInteraction(): void {
+    if (audio.paused && localStorage.getItem(STORAGE_PLAYING) === '1') {
+      play();
+    }
+    // 只监听一次即可，避免重复触发
+    document.removeEventListener('click', tryResumeOnInteraction);
+    document.removeEventListener('touchstart', tryResumeOnInteraction);
+    document.removeEventListener('keydown', tryResumeOnInteraction);
+  }
+  document.addEventListener('click', tryResumeOnInteraction);
+  document.addEventListener('touchstart', tryResumeOnInteraction);
+  document.addEventListener('keydown', tryResumeOnInteraction);
+
+  // 初始化按钮 UI 状态
+  updateUI();
+</script>

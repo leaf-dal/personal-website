@@ -1,0 +1,117 @@
+---
+/**
+ * 首页首屏组件（非对称数据终端布局）
+ * 设计目标：让黑洞特效成为视觉中心，文字信息退居角落
+ *   - 左上角：视觉引导区 "Welcome to the / Sternstunde."（复用原紫色手写体样式）
+ *   - 中央：完全留白，作为黑洞特效的展示舞台
+ *   - 左下角：个人数据终端（等宽字体、低透明度，模拟终端输出）
+ */
+
+// Sternstunde 主题词：拆分为单个字符，用于逐字符点亮入场动画（含句点）
+const wordLetters = 'Sternstunde.'.split('');
+---
+
+<!--
+  首屏容器：
+  min-h-screen 占满整个视口高度，
+  relative 为左上角 / 左下角绝对定位提供参照，
+  overflow-hidden 防止溢出。
+-->
+<section class="relative min-h-screen w-full overflow-hidden">
+  <!-- ===== 左上角：视觉引导区 ===== -->
+  <div class="absolute top-20 left-5 z-10 sm:top-24 sm:left-10">
+    <!-- 第一行：引导语 -->
+    <p class="text-base font-light tracking-wide text-white/60 sm:text-lg">
+      Welcome to the
+    </p>
+    <!-- 第二行：Sternstunde. —— 复用原紫色手写体（渐变 + 呼吸光晕 + 逐字符入场） -->
+    <p
+      class="stern-glow mt-1 font-serif text-5xl italic tracking-wide sm:text-6xl lg:text-7xl"
+      aria-label="Sternstunde"
+    >
+      {
+        wordLetters.map((letter, index) => (
+          <span
+            class="stern-letter-reveal"
+            style={`animation-delay: ${index * 0.12}s;`}
+          >
+            {letter}
+          </span>
+        ))
+      }
+    </p>
+  </div>
+
+  <!-- ===== 中央：完全留白，留给黑洞特效 ===== -->
+
+  <!-- ===== 左下角：个人数据终端（Personal Data Terminal）===== -->
+  <div
+    class="data-terminal absolute bottom-32 left-5 z-10 font-mono text-base leading-relaxed sm:bottom-36 sm:left-10 sm:text-lg"
+    style="color: rgba(255, 255, 255, 0.6);"
+  >
+    <p>>王佳叶 WANG JIAYE</p>
+    <p>> 人工智能 &amp; 前端开发</p>
+    <p>> 湖北文理学院理工学院本科在读 养老服务管理专业</p>
+    <p>> 哲学 自我</p>
+  </div>
+</section>
+
+<style>
+  /* ===== Sternstunde 逐字符点亮 + 呼吸光晕（复用原紫色手写体样式） ===== */
+  .stern-glow {
+    animation: glow-breathe 3s ease-in-out 2.2s infinite;
+  }
+
+  .stern-letter-reveal {
+    display: inline-block;
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: letter-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes letter-reveal {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes glow-breathe {
+    0%,
+    100% {
+      filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.35));
+    }
+    50% {
+      filter: drop-shadow(0 0 18px rgba(236, 72, 153, 0.55));
+    }
+  }
+
+  /* ===== 个人数据终端：打字机逐行淡入效果 ===== */
+  .data-terminal p {
+    opacity: 0;
+    animation: terminal-fade-in 0.6s ease-out forwards;
+  }
+
+  .data-terminal p:nth-child(1) { animation-delay: 0.4s; }
+  .data-terminal p:nth-child(2) { animation-delay: 0.8s; }
+  .data-terminal p:nth-child(3) { animation-delay: 1.2s; }
+  .data-terminal p:nth-child(4) { animation-delay: 1.6s; }
+
+  @keyframes terminal-fade-in {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+</style>

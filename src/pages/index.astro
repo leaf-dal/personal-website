@@ -10,7 +10,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/HeroSection.astro';
 import SectionTitle from '../components/SectionTitle.astro';
-import GhostElement from '../components/GhostElement.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_DESCRIPTION, SOCIAL_LINKS } from '../constants/site';
 // 书架组件样式（作用域限定在 .bookshelf-wrap 内，避免与全站样式冲突）
@@ -98,28 +97,6 @@ const glowSurveyItems = [
 const glowAchievements = [
   '测评 3 款 AI 陪伴机器人',
   '为什么智能手环戴三天就闲置？'
-];
-
-// ====================================================================
-// 关于我板块数据（原 about 页面）
-// ====================================================================
-
-// 技能标签列表
-const skillTags = [
-  'HTML5',
-  'CSS3',
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'Vue',
-  'Astro',
-  'Tailwind CSS',
-  'Node.js',
-  'Git',
-  'Python',
-  'AI 工具',
-  '视频剪辑',
-  'PPT 设计'
 ];
 
 // ====================================================================
@@ -244,6 +221,18 @@ const projectList = [
       群星之下，是我此刻的坐标。
     </p>
 
+    <!-- 自我介绍：Who I Am -->
+    <section class="relative z-10 py-52 sm:py-64" aria-labelledby="about-heading">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <SectionTitle
+          id="about-heading"
+          title="Who I Am"
+          subtitle="大一新生 · 技术服务同学 · 持续成长"
+          bold
+        />
+      </div>
+    </section>
+
     <!-- 我的技能区 -->
     <section class="relative z-10 py-52 sm:py-64" aria-labelledby="skills-heading">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -273,10 +262,98 @@ const projectList = [
       </div>
     </section>
 
-    <!-- 我的成就区：展示科大讯飞 AI 大学堂认证证书 -->
+    <!-- Global Glow 区：适老化智能产品调研实践 -->
+    <section class="relative z-10 py-52 sm:py-64 bg-bg-secondary/50" aria-labelledby="glow-heading">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionTitle
+          id="glow-heading"
+          title="Global Glow"
+          subtitle="适老化智能产品调研实践 · 让科技为长辈发光"
+        />
+
+        <!-- 调研概述：点明调研目的与方式 -->
+        <p class="mx-auto mt-4 max-w-3xl text-center text-base leading-loose text-text-secondary sm:text-lg">
+          为了解适老化智能产品的真实使用痛点，我开展了一次专项调研，通过线上+线下结合的方式收集素材，并整理成网站内容。
+        </p>
+
+        <!-- 调研维度卡片网格：线上调研 / 线下观察 / 核心发现 —— 拉大 padding 与卡片间隙 -->
+        <div class="mt-14 grid gap-10 md:grid-cols-3">
+          {
+            glowSurveyItems.map((item) => (
+              <div class="rounded-xl border border-border bg-bg-secondary p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-accent/5">
+                <!-- 维度图标：语义化表达调研方式 -->
+                <span class="text-3xl" aria-hidden="true">{item.icon}</span>
+                <h3 class="mt-4 text-lg font-bold text-text-primary">{item.title}</h3>
+                <p class="mt-4 text-base leading-relaxed text-text-secondary">
+                  {item.description}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- 实践成果横幅：沉淀为文章发布在行业观察板块 -->
+        <div class="mt-12 rounded-2xl border border-accent/30 bg-gradient-to-r from-accent/10 to-pink-500/10 p-8">
+          <h3 class="text-center text-xl font-bold text-text-primary">实践成果</h3>
+          <p class="mx-auto mt-3 max-w-3xl text-center text-base leading-loose text-text-secondary">
+            将调研内容整理成以下文章，发布在个人网站的行业观察板块，获得不少读者反馈。
+          </p>
+          <!-- 文章标题列表：两篇调研文章 -->
+          <ul class="mt-6 flex flex-wrap items-center justify-center gap-4">
+            {
+              glowAchievements.map((article) => (
+                <li class="rounded-full border border-accent/40 bg-bg-primary/60 px-5 py-2 text-sm font-semibold text-accent shadow-sm">
+                  {article}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 个人时间线区：左侧中轴 + 圆点标记的成长轨迹 -->
+    <section id="timeline" class="relative z-10 py-52 sm:py-64" aria-labelledby="timeline-heading">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <SectionTitle
+          id="timeline-heading"
+          title="My Timeline"
+          subtitle="我的成长轨迹"
+        />
+
+        <!-- 时间线列表：左侧竖线为时间轴，卡片依次向下排列 -->
+        <ol class="relative mt-12 space-y-10 border-l-2 border-border pl-8 sm:pl-10">
+          {
+            timelineItems.map((item) => (
+              <li class="relative">
+                <!-- 时间线圆点：中心对齐到左侧竖线 -->
+                <span class="timeline-dot" aria-hidden="true"></span>
+
+                <!-- 时间卡片 -->
+                <div class="rounded-xl border border-border bg-bg-secondary/60 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_30px_-12px_rgba(124,58,237,0.35)]">
+                  <!-- 日期徽章 -->
+                  <p class="inline-block rounded-full bg-accent/10 px-3 py-0.5 text-sm font-bold tracking-wide text-accent">
+                    {item.date}
+                  </p>
+                  <h3 class="mt-3 text-lg font-bold text-text-primary">
+                    {item.title}
+                  </h3>
+                  <p class="mt-2 text-base leading-relaxed text-text-secondary">
+                    {item.description}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- 我的成就区：展示科大讯飞 AI 大学堂认证证书（位于时间线正下方） -->
     <section class="relative z-10 py-52 sm:py-64" aria-labelledby="achievements-heading">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
+          id="achievements-heading"
           title="My Achievements"
           subtitle="我的成就"
         />
@@ -357,330 +434,202 @@ const projectList = [
       </div>
     </section>
 
-    <!-- Global Glow 区：适老化智能产品调研实践 -->
-    <section class="relative z-10 py-52 sm:py-64 bg-bg-secondary/50" aria-labelledby="glow-heading">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <SectionTitle
-          id="glow-heading"
-          title="Global Glow"
-          subtitle="适老化智能产品调研实践 · 让科技为长辈发光"
-        />
-
-        <!-- 调研概述：点明调研目的与方式 -->
-        <p class="mx-auto mt-4 max-w-3xl text-center text-base leading-loose text-text-secondary sm:text-lg">
-          为了解适老化智能产品的真实使用痛点，我开展了一次专项调研，通过线上+线下结合的方式收集素材，并整理成网站内容。
-        </p>
-
-        <!-- 调研维度卡片网格：线上调研 / 线下观察 / 核心发现 —— 拉大 padding 与卡片间隙 -->
-        <div class="mt-14 grid gap-10 md:grid-cols-3">
-          {
-            glowSurveyItems.map((item) => (
-              <div class="rounded-xl border border-border bg-bg-secondary p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl hover:shadow-accent/5">
-                <!-- 维度图标：语义化表达调研方式 -->
-                <span class="text-3xl" aria-hidden="true">{item.icon}</span>
-                <h3 class="mt-4 text-lg font-bold text-text-primary">{item.title}</h3>
-                <p class="mt-4 text-base leading-relaxed text-text-secondary">
-                  {item.description}
-                </p>
-              </div>
-            ))
-          }
-        </div>
-
-        <!-- 实践成果横幅：沉淀为文章发布在行业观察板块 -->
-        <div class="mt-12 rounded-2xl border border-accent/30 bg-gradient-to-r from-accent/10 to-pink-500/10 p-8">
-          <h3 class="text-center text-xl font-bold text-text-primary">实践成果</h3>
-          <p class="mx-auto mt-3 max-w-3xl text-center text-base leading-loose text-text-secondary">
-            将调研内容整理成以下文章，发布在个人网站的行业观察板块，获得不少读者反馈。
-          </p>
-          <!-- 文章标题列表：两篇调研文章 -->
-          <ul class="mt-6 flex flex-wrap items-center justify-center gap-4">
-            {
-              glowAchievements.map((article) => (
-                <li class="rounded-full border border-accent/40 bg-bg-primary/60 px-5 py-2 text-sm font-semibold text-accent shadow-sm">
-                  {article}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 个人时间线区：左侧中轴 + 圆点标记的成长轨迹 -->
-    <section id="timeline" class="relative z-10 py-52 sm:py-64" aria-labelledby="timeline-heading">
+    <!-- 生活与爱好：三条个人兴趣记录，半透明背景框 + 内边距，与星空背景区分 -->
+    <section class="relative z-10 py-52 sm:py-64">
       <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <SectionTitle
-          id="timeline-heading"
-          title="My Timeline"
-          subtitle="个人时间线 · 我的成长轨迹"
-        />
-
-        <!-- 时间线列表：左侧竖线为时间轴，卡片依次向下排列 -->
-        <ol class="relative mt-12 space-y-10 border-l-2 border-border pl-8 sm:pl-10">
-          {
-            timelineItems.map((item) => (
-              <li class="relative">
-                <!-- 时间线圆点：中心对齐到左侧竖线 -->
-                <span class="timeline-dot" aria-hidden="true"></span>
-
-                <!-- 时间卡片 -->
-                <div class="rounded-xl border border-border bg-bg-secondary/60 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_8px_30px_-12px_rgba(124,58,237,0.35)]">
-                  <!-- 日期徽章 -->
-                  <p class="inline-block rounded-full bg-accent/10 px-3 py-0.5 text-sm font-bold tracking-wide text-accent">
-                    {item.date}
-                  </p>
-                  <h3 class="mt-3 text-lg font-bold text-text-primary">
-                    {item.title}
-                  </h3>
-                  <p class="mt-2 text-base leading-relaxed text-text-secondary">
-                    {item.description}
-                  </p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
-  </section>
-
-  <!-- ==============================================================
-       板块二：关于我（#about）
-       原 about 页面内容：个人简介、技能栈、联系方式
-       ============================================================== -->
-  <section id="about" class="relative min-h-screen py-52 sm:py-64">
-    <!-- 左下角幽灵装饰 -->
-    <GhostElement opacity={0.15} positionClass="bottom-32 left-4 sm:left-8" />
-
-    <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <!-- 英文花体加粗标题 -->
-      <SectionTitle
-        title="Who I Am"
-        subtitle="大一新生 · 技术服务同学 · 持续成长"
-        bold
-      />
-
-      <!-- 生活与爱好：三条个人兴趣记录，半透明背景框 + 内边距，与星空背景区分 -->
-      <div class="mx-auto mt-10 max-w-2xl">
         <h2 class="mb-6 text-center text-2xl font-bold text-[#c5d3eb] sm:text-3xl">
           生活与爱好
         </h2>
-        <ul class="space-y-5">
-          <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
-            <span class="text-xl leading-none" aria-hidden="true">🥁🥁</span>
-            <div>
-              <p class="font-semibold text-[#c5d3eb]">阅读偏好</p>
-              <p class="mt-1 text-sm text-[#c5d3eb]/80">喜欢看各种类型的小说。</p>
-            </div>
-          </li>
-          <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
-            <span class="text-xl leading-none" aria-hidden="true">🎸🎸</span>
-            <div>
-              <p class="font-semibold text-[#c5d3eb]">暑期成就</p>
-              <p class="mt-1 text-sm text-[#c5d3eb]/80">完成了拼图挑战。</p>
-            </div>
-          </li>
-          <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
-            <span class="text-xl leading-none" aria-hidden="true">🎹🎹</span>
-            <div>
-              <p class="font-semibold text-[#c5d3eb]">新尝试</p>
-              <p class="mt-1 text-sm text-[#c5d3eb]/80">开始尝试学习化妆。</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+        <div class="mx-auto max-w-2xl">
+          <ul class="space-y-5">
+            <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
+              <span class="text-xl leading-none" aria-hidden="true">🥁🥁</span>
+              <div>
+                <p class="font-semibold text-[#c5d3eb]">阅读偏好</p>
+                <p class="mt-1 text-sm text-[#c5d3eb]/80">喜欢看各种类型的小说。</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
+              <span class="text-xl leading-none" aria-hidden="true">🎸🎸</span>
+              <div>
+                <p class="font-semibold text-[#c5d3eb]">暑期成就</p>
+                <p class="mt-1 text-sm text-[#c5d3eb]/80">完成了拼图挑战。</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-colors hover:border-accent/40">
+              <span class="text-xl leading-none" aria-hidden="true">🎹🎹</span>
+              <div>
+                <p class="font-semibold text-[#c5d3eb]">新尝试</p>
+                <p class="mt-1 text-sm text-[#c5d3eb]/80">开始尝试学习化妆。</p>
+              </div>
+            </li>
+          </ul>
+        </div>
 
-      <!-- 爱好剪影：左侧动漫 3D 扇形卡片 + 右侧拍立得生活碎片画廊 -->
-      <div class="mt-24">
-        <!-- 板块总标题 -->
-        <h3 class="text-center text-2xl font-bold text-[#c5d3eb] sm:text-3xl">爱好剪影</h3>
-        <p
-          class="mt-2 text-center"
-          style="color: rgba(255, 255, 255, 0.5); font-size: 14px; letter-spacing: 2px; margin-bottom: 48px;"
-        >
-          动漫与日常，构成我的精神世界
-        </p>
+        <!-- 爱好剪影：左侧动漫 3D 扇形卡片 + 右侧拍立得生活碎片画廊 -->
+        <div class="mt-24">
+          <h3 class="text-center text-2xl font-bold text-[#c5d3eb] sm:text-3xl">爱好剪影</h3>
+          <p
+            class="mt-2 text-center"
+            style="color: rgba(255, 255, 255, 0.5); font-size: 14px; letter-spacing: 2px; margin-bottom: 48px;"
+          >
+            动漫与日常，构成我的精神世界
+          </p>
 
-        <!-- 双列布局：桌面端左右并排，移动端上下堆叠 -->
-        <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <!-- 区域一：动漫照片 · 3D 扇形堆叠翻转卡片 -->
-          <div>
-            <h4 class="mb-4 text-center text-lg font-semibold text-[#c5d3eb]">动漫也是生命的筋脉</h4>
-            <!-- 扇形堆叠容器：5 张卡片呈扇形散开，居中 C 位 -->
-            <div class="photo-stack">
-              <!-- 卡片 1 -->
-              <div class="photo-card" onclick="this.classList.toggle('flipped')">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <img src={`${import.meta.env.BASE_URL}images/anime/anime1.jpg`} alt="少年乐队的呐喊" />
-                  </div>
-                  <div class="card-back">
-                    <p>少年乐队的呐喊</p>
+          <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <!-- 区域一：动漫照片 · 3D 扇形堆叠翻转卡片 -->
+            <div>
+              <h4 class="mb-4 text-center text-lg font-semibold text-[#c5d3eb]">动漫也是生命的筋脉</h4>
+              <div class="photo-stack">
+                <div class="photo-card" onclick="this.classList.toggle('flipped')">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <img src={`${import.meta.env.BASE_URL}images/anime/anime1.jpg`} alt="少年乐队的呐喊" />
+                    </div>
+                    <div class="card-back">
+                      <p>少年乐队的呐喊</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- 卡片 2 -->
-              <div class="photo-card" onclick="this.classList.toggle('flipped')">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <img src={`${import.meta.env.BASE_URL}images/anime/anime2.jpg`} alt="时光代理人" />
-                  </div>
-                  <div class="card-back">
-                    <p>时光代理人</p>
-                  </div>
-                </div>
-              </div>
-              <!-- 卡片 3 -->
-              <div class="photo-card" onclick="this.classList.toggle('flipped')">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <img src={`${import.meta.env.BASE_URL}images/anime/anime3.jpg`} alt="孤独摇滚" />
-                  </div>
-                  <div class="card-back">
-                    <p>孤独摇滚</p>
+                <div class="photo-card" onclick="this.classList.toggle('flipped')">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <img src={`${import.meta.env.BASE_URL}images/anime/anime2.jpg`} alt="时光代理人" />
+                    </div>
+                    <div class="card-back">
+                      <p>时光代理人</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- 卡片 4 -->
-              <div class="photo-card" onclick="this.classList.toggle('flipped')">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <img src={`${import.meta.env.BASE_URL}images/anime/anime4.jpg`} alt="鬼灭之刃" />
-                  </div>
-                  <div class="card-back">
-                    <p>鬼灭之刃</p>
+                <div class="photo-card" onclick="this.classList.toggle('flipped')">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <img src={`${import.meta.env.BASE_URL}images/anime/anime3.jpg`} alt="孤独摇滚" />
+                    </div>
+                    <div class="card-back">
+                      <p>孤独摇滚</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- 卡片 5 -->
-              <div class="photo-card" onclick="this.classList.toggle('flipped')">
-                <div class="card-inner">
-                  <div class="card-front">
-                    <img src={`${import.meta.env.BASE_URL}images/anime/anime5.jpg`} alt="天官赐福" />
+                <div class="photo-card" onclick="this.classList.toggle('flipped')">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <img src={`${import.meta.env.BASE_URL}images/anime/anime4.jpg`} alt="鬼灭之刃" />
+                    </div>
+                    <div class="card-back">
+                      <p>鬼灭之刃</p>
+                    </div>
                   </div>
-                  <div class="card-back">
-                    <p>天官赐福</p>
+                </div>
+                <div class="photo-card" onclick="this.classList.toggle('flipped')">
+                  <div class="card-inner">
+                    <div class="card-front">
+                      <img src={`${import.meta.env.BASE_URL}images/anime/anime5.jpg`} alt="天官赐福" />
+                    </div>
+                    <div class="card-back">
+                      <p>天官赐福</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- 区域二：生活碎片 · 拍立得风格小画廊 -->
-          <div>
-            <h4 class="mb-4 text-center text-lg font-semibold text-[#c5d3eb]">捕捉日常的闪光瞬间</h4>
-            <div class="polaroid-gallery">
-              <figure class="polaroid rotate-1">
-                <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby1.jpg`} alt="成为主角的第N幕" />
-                <figcaption>成为主角的第N幕</figcaption>
-              </figure>
-              <figure class="polaroid -rotate-2">
-                <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby2.jpg`} alt="重塑的碎片" />
-                <figcaption>重塑的碎片</figcaption>
-              </figure>
-              <figure class="polaroid rotate-3">
-                <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby3.jpg`} alt="长夜的缺口" />
-                <figcaption>长夜的缺口</figcaption>
-              </figure>
-              <figure class="polaroid -rotate-1">
-                <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby4.jpg`} alt="下一站，未知" />
-                <figcaption>下一站，未知</figcaption>
-              </figure>
+            <!-- 区域二：生活碎片 · 拍立得风格小画廊 -->
+            <div>
+              <h4 class="mb-4 text-center text-lg font-semibold text-[#c5d3eb]">捕捉日常的闪光瞬间</h4>
+              <div class="polaroid-gallery">
+                <figure class="polaroid rotate-1">
+                  <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby1.jpg`} alt="成为主角的第N幕" />
+                  <figcaption>成为主角的第N幕</figcaption>
+                </figure>
+                <figure class="polaroid -rotate-2">
+                  <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby2.jpg`} alt="重塑的碎片" />
+                  <figcaption>重塑的碎片</figcaption>
+                </figure>
+                <figure class="polaroid rotate-3">
+                  <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby3.jpg`} alt="长夜的缺口" />
+                  <figcaption>长夜的缺口</figcaption>
+                </figure>
+                <figure class="polaroid -rotate-1">
+                  <img src={`${import.meta.env.BASE_URL}images/hobbies/hobby4.jpg`} alt="下一站，未知" />
+                  <figcaption>下一站，未知</figcaption>
+                </figure>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 我的书架：从原 My Bookshelf 板块移入，位于 Who I Am / 生活与爱好 下方 -->
-      <div class="mt-16">
-        <!-- 书架组件根容器：bookshelf.css 的变量作用域 + 站点卡片风格 -->
-        <div class="bookshelf-wrap rounded-3xl border border-border bg-bg-secondary px-4 py-8 sm:px-8">
-          <!-- 书籍轮播：一排书自动缓慢向左滚动；触屏可左右滑动翻页 -->
-          <section class="carousel" id="carousel" aria-label="书籍轮播">
-            <div class="carousel-track" id="carouselTrack"></div>
-          </section>
-
-          <!-- 页码指示点（点击可跳转） -->
-          <div class="carousel-dots" id="carouselDots" hidden></div>
-
-          <!-- 空状态：书架上没有任何书时显示 -->
-          <div class="empty-state" id="emptyState" hidden>
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-            <p class="empty-title" id="emptyTitle">书架上空空的</p>
-            <p class="empty-tip" id="emptyTip">点击右下角 + 按钮，添加你的第一本书</p>
-          </div>
-
-          <!-- 悬浮添加按钮 -->
-          <button class="fab" id="fabBtn" type="button" aria-label="添加书籍">+</button>
-
-          <!-- 添加书籍模态框 -->
-          <div class="modal-mask" id="addModal" hidden>
-            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle">
-              <button class="modal-close" type="button" data-close="addModal" aria-label="关闭">&times;</button>
-              <h2 class="modal-title" id="addTitle">添加一本书</h2>
-              <form id="addForm" novalidate>
-                <div class="form-field">
-                  <label class="form-label" for="inputTitle">书名 <em>*</em></label>
-                  <input class="form-input" id="inputTitle" name="title" type="text"
-                         placeholder="请输入书名" maxlength="40" />
-                </div>
-                <div class="form-field">
-                  <label class="form-label" for="inputAuthor">作者</label>
-                  <input class="form-input" id="inputAuthor" name="author" type="text"
-                         placeholder="请输入作者" maxlength="30" />
-                </div>
-                <div class="form-field">
-                  <label class="form-label" for="inputCover">封面图片链接</label>
-                  <input class="form-input" id="inputCover" name="cover" type="url"
-                         placeholder="https://…（留空则使用默认封面）" />
-                </div>
-                <div class="form-field">
-                  <label class="form-label" for="inputQuote">书中金句（可选）</label>
-                  <textarea class="form-input" id="inputQuote" name="quote" rows="3"
-                            placeholder="将显示在书卡背面"></textarea>
-                </div>
-                <div class="form-field">
-                  <p class="form-label">阅读状态</p>
-                  <div class="status-picker" id="addStatusPicker"></div>
-                </div>
+        <!-- 我的书架 -->
+        <div class="mt-16">
+          <div class="bookshelf-wrap rounded-3xl border border-border bg-bg-secondary px-4 py-8 sm:px-8">
+            <section class="carousel" id="carousel" aria-label="书籍轮播">
+              <div class="carousel-track" id="carouselTrack"></div>
+            </section>
+            <div class="carousel-dots" id="carouselDots" hidden></div>
+            <div class="empty-state" id="emptyState" hidden>
+              <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <p class="empty-title" id="emptyTitle">书架上空空的</p>
+              <p class="empty-tip" id="emptyTip">点击右下角 + 按钮，添加你的第一本书</p>
+            </div>
+            <button class="fab" id="fabBtn" type="button" aria-label="添加书籍">+</button>
+            <div class="modal-mask" id="addModal" hidden>
+              <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+                <button class="modal-close" type="button" data-close="addModal" aria-label="关闭">&times;</button>
+                <h2 class="modal-title" id="addTitle">添加一本书</h2>
+                <form id="addForm" novalidate>
+                  <div class="form-field">
+                    <label class="form-label" for="inputTitle">书名 <em>*</em></label>
+                    <input class="form-input" id="inputTitle" name="title" type="text" placeholder="请输入书名" maxlength="40" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="inputAuthor">作者</label>
+                    <input class="form-input" id="inputAuthor" name="author" type="text" placeholder="请输入作者" maxlength="30" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="inputCover">封面图片链接</label>
+                    <input class="form-input" id="inputCover" name="cover" type="url" placeholder="https://…（留空则使用默认封面）" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="inputQuote">书中金句（可选）</label>
+                    <textarea class="form-input" id="inputQuote" name="quote" rows="3" placeholder="将显示在书卡背面"></textarea>
+                  </div>
+                  <div class="form-field">
+                    <p class="form-label">阅读状态</p>
+                    <div class="status-picker" id="addStatusPicker"></div>
+                  </div>
+                  <div class="form-actions">
+                    <button type="button" class="bs-btn bs-btn-ghost" data-close="addModal">取消</button>
+                    <button type="submit" class="bs-btn bs-btn-primary">加入书架</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-mask" id="confirmModal" hidden>
+              <div class="modal confirm-modal" role="alertdialog" aria-modal="true">
+                <p class="confirm-text" id="confirmText">确定要删除这本书吗？</p>
                 <div class="form-actions">
-                  <button type="button" class="bs-btn bs-btn-ghost" data-close="addModal">取消</button>
-                  <button type="submit" class="bs-btn bs-btn-primary">加入书架</button>
+                  <button type="button" class="bs-btn bs-btn-ghost" data-close="confirmModal">取消</button>
+                  <button type="button" class="bs-btn bs-btn-danger" id="confirmDeleteBtn">删除</button>
                 </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- 删除确认模态框 -->
-          <div class="modal-mask" id="confirmModal" hidden>
-            <div class="modal confirm-modal" role="alertdialog" aria-modal="true">
-              <p class="confirm-text" id="confirmText">确定要删除这本书吗？</p>
-              <div class="form-actions">
-                <button type="button" class="bs-btn bs-btn-ghost" data-close="confirmModal">取消</button>
-                <button type="button" class="bs-btn bs-btn-danger" id="confirmDeleteBtn">删除</button>
               </div>
             </div>
+            <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
           </div>
-
-          <!-- 轻提示（操作反馈） -->
-          <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
         </div>
-      </div>
 
-      <!-- 书架脚本：普通脚本按序加载（非 ES Module），必须放在书架 DOM 之后 -->
-      <script src="bookshelf/js/storage.js" is:inline></script>
-      <script src="bookshelf/js/app.js" is:inline></script>
-    </div>
+        <!-- 书架脚本：普通脚本按序加载（非 ES Module），必须放在书架 DOM 之后 -->
+        <script src="bookshelf/js/storage.js" is:inline></script>
+        <script src="bookshelf/js/app.js" is:inline></script>
+      </div>
+    </section>
   </section>
 
   <!-- ==============================================================
-       板块三：项目展示（#projects）
-       原 projects 页面内容：项目卡片网格 + 详情模态框
+       板块二：项目展示（#projects）
        ============================================================== -->
   <section id="projects" class="relative min-h-screen pb-64 pt-52 sm:pb-72 sm:pt-64">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -702,25 +651,6 @@ const projectList = [
             />
           ))
         }
-      </div>
-
-      <!-- 技能栈：从 #about 移至此处，所有文字纯白 #ffffff -->
-      <div class="mt-20">
-        <h2 class="text-center text-2xl font-bold text-white sm:text-3xl">
-          技能栈
-        </h2>
-        <p class="mt-3 text-center text-white/80">
-          正在持续学习与扩展的技术工具清单
-        </p>
-        <ul class="mt-8 flex flex-wrap justify-center gap-3">
-          {
-            skillTags.map((tag) => (
-              <li class="rounded-full border border-white/30 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-white/60 hover:bg-white/10">
-                {tag}
-              </li>
-            ))
-          }
-        </ul>
       </div>
 
       <!-- 联系我：从 #about 移至此处，所有文字纯白 #ffffff -->
